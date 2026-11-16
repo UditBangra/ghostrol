@@ -92,5 +92,5 @@ After five play sessions, the popup shows one line: "If Ghostrol works well for 
 - [ ] Tested on real Xbox Cloud Gaming by a person (see `PROGRESS.md`)
 - [ ] Screenshots and promo tile made from the real build
 - [ ] Chrome Web Store developer account ($5 one time)
-- [ ] Privacy fields filled in: no data collected
+- [ ] Privacy fields filled in: no data collected; privacy policy URL https://ghostrol.com/privacy
 - [ ] `npm run package`, then upload `release/<name>-<version>.zip`

@@ -85,15 +85,15 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 - [x] CHANGELOG, SECURITY, CODE_OF_CONDUCT, contributing notes for the GPL
 - [x] Report a problem in the popup (pre-filled GitHub issue)
 - [x] `git init` (nothing committed yet)
-- [ ] Owner: create the GitHub repository and send the username; then `brand.ts`, `.github/ISSUE_TEMPLATE/config.yml` and the README links point at it
+- [x] Public repository: https://github.com/UditBangra/ghostrol (links in brand.ts, README and issue config point there; private vulnerability reporting on)
 - [ ] Owner: Chrome Web Store developer account (personal Google account, non-trader) and two-step login on Google and GitHub
-- [ ] Privacy page on ghostrol.com (needed before store submission), styled like the rest of Ghostrol
+- [x] ghostrol.com live on Vercel (project ghostrol, root site/, deploys on every push to main): home page and https://ghostrol.com/privacy; www redirects with 308; DNS A record at Hostinger points to 216.198.79.1
 - [ ] Store screenshots and promo tile from real screenshots, icons from the skull logo; store permission reasons and the Microsoft disclaimer
 - [ ] Import from ModernKit (user's exported presets)
 - [ ] Publish on Microsoft Edge Add-ons as well
 - [ ] Website on Vercel right after launch: home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon
 - [ ] Demo video
-- [ ] Open question: Preact and Lenis are MIT, whose terms ask for their notice in copies; the owner said no third-party license file
+- [x] THIRD-PARTY-NOTICES.txt for Preact and Lenis in the zip (owner agreed 2026-11-16)
 
 ## Verification
 
