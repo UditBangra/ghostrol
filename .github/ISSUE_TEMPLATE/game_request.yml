@@ -1,0 +1,30 @@
+name: Tune a game
+description: Ask for a preset made for one game, or share its controller layout.
+labels: [preset]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every cloud game already gets a layout for its genre. A tuned preset needs the game's controller layout confirmed by a source, so a link helps most. See docs/PRESETS.md.
+  - type: input
+    id: game
+    attributes:
+      label: Game
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What feels wrong with the current layout
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source for the controller layout
+      description: The game's official controls page, its in-game controls screen, or a guide.
+  - type: textarea
+    id: keys
+    attributes:
+      label: Keys you would like
+      placeholder: Q and E for the bumpers, F to interact

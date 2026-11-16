@@ -1,0 +1,1084 @@
+.studio {
+  display: grid;
+  grid-template-columns: 216px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* Rail */
+.rail {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100vh;
+  padding: 22px 16px;
+  border-right: 1px solid var(--plate-line);
+  background: var(--well);
+}
+.rail-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: -4px 0 0 -2px;
+  color: var(--legend);
+  font-size: 31px;
+  text-decoration: none;
+}
+.rail-brand img,
+.welcome-brand img {
+  transition: rotate 320ms var(--ease);
+}
+.rail-brand:hover img {
+  rotate: -8deg;
+}
+.rail ul {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* The current section: a keycap face with the honey bar on the rail's edge, moving as one. */
+.rail ul .thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--thumb-w, 0);
+  height: var(--thumb-h, 0);
+  translate: var(--thumb-x, 0) var(--thumb-y, 0);
+  border-radius: var(--r-control);
+  background: linear-gradient(var(--cap-top), var(--cap) 70%);
+  box-shadow: inset 0 -3px 0 var(--cap-edge);
+  opacity: 0;
+  pointer-events: none;
+}
+.rail ul .thumb::before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  bottom: 10px;
+  left: -16px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--honey);
+}
+.rail ul.has-thumb .thumb {
+  opacity: 1;
+}
+.rail ul.thumb-ready .thumb {
+  transition:
+    translate var(--glide-ms) var(--glide),
+    width var(--glide-ms) var(--glide),
+    height var(--glide-ms) var(--glide);
+} /* An ember line down the edge of the rail. */
+.rail::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -1px;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    transparent 15%,
+    rgba(242, 177, 58, 0.35) 60%,
+    rgba(255, 106, 42, 0.5) 88%,
+    transparent
+  );
+}
+.rail ul a {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding: 8px 10px 9px;
+  transition:
+    color 120ms var(--ease),
+    translate 160ms var(--ease);
+  border-radius: var(--r-control);
+  color: var(--legend-dim);
+  font-weight: 560;
+  text-decoration: none;
+}
+.rail ul a:hover {
+  color: var(--legend);
+  translate: 2px 0;
+}
+.rail ul a[aria-current='page'] {
+  color: var(--legend);
+}
+.rail-foot {
+  margin: auto 0 0;
+  font-size: var(--text-xs);
+}
+
+/* Stage */
+.stage {
+  min-width: 0;
+  padding: 28px 36px 48px;
+}
+/* Each view, and each preset in the editor, settles in when it opens. */
+.stage > *,
+.editor {
+  animation: settle 280ms var(--ease) both;
+}
+.view-head {
+  display: grid;
+  gap: 8px;
+  max-width: 760px;
+  margin-bottom: 22px;
+}
+.view-head h1,
+.editor-title h1 {
+  margin: 0;
+  font-size: var(--text-hero);
+  font-weight: 790;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+.view-head p {
+  margin: 0;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+h3 {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 650;
+  color: var(--legend-dim);
+}
+.small {
+  font-size: var(--text-xs);
+}
+.error {
+  color: var(--alert);
+  font-size: var(--text-sm);
+}
+
+.panel {
+  padding: 18px;
+  border-radius: var(--r-panel);
+  background: var(--plate);
+}
+
+/* Presets */
+.presets {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.preset-list {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 18px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.list-actions {
+  display: flex;
+  gap: 8px;
+}
+.preset-group h2 {
+  margin-bottom: 6px;
+  font-size: var(--text-sm);
+  color: var(--legend-dim);
+}
+.preset-group ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.preset-group a {
+  transition:
+    background-color 100ms var(--ease),
+    translate 160ms var(--ease);
+  display: block;
+  padding: 6px 8px;
+  border-radius: var(--r-control);
+  color: var(--legend);
+  text-decoration: none;
+  font-size: var(--text-sm);
+}
+.preset-group a:hover {
+  background: var(--plate);
+  translate: 2px 0;
+}
+.preset-group a[aria-current='true'] {
+  background: var(--plate);
+  box-shadow: inset 0 0 0 1px var(--plate-line);
+  font-weight: 650;
+}
+
+/* Editor */
+.editor {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+.editor-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.editor-title {
+  display: grid;
+  gap: 6px;
+  max-width: 640px;
+}
+.editor-title p {
+  margin: 0;
+}
+.kind {
+  font-size: var(--text-sm);
+}
+.name-input {
+  width: 100%;
+  padding: 0 0 2px;
+  border: 0;
+  border-bottom: 1px dashed var(--plate-line);
+  background: none;
+  font-size: var(--text-hero);
+  font-weight: 790;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+.name-input:focus-visible {
+  box-shadow: none;
+  border-bottom-color: var(--honey);
+}
+.editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.saved {
+  font-size: var(--text-sm);
+}
+.editor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 22px;
+  align-items: start;
+}
+.side {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 16px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+.readonly-note {
+  margin: -4px 0 14px;
+  font-size: var(--text-sm);
+}
+
+.group {
+  display: grid;
+  margin-bottom: 18px;
+}
+.group h3 {
+  padding: 0 0 6px;
+}
+/* Rows lay themselves out by the width of the list, not the window. */
+.bindings {
+  container-type: inline-size;
+}
+.binding {
+  display: grid;
+  grid-template-columns: 56px minmax(110px, 1fr) minmax(0, 1.4fr) minmax(76px, auto);
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--plate-line);
+  border-radius: 4px;
+  scroll-margin: 120px;
+}
+.binding.highlighted {
+  background: #2a2a24;
+}
+.binding-label {
+  min-width: 0;
+  font-size: var(--text-sm);
+}
+.label-input {
+  width: 100%;
+  height: 30px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--r-control);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px transparent;
+}
+.label-input:hover {
+  box-shadow: inset 0 0 0 1px var(--plate-line);
+}
+.label-input:focus-visible {
+  background: var(--well);
+}
+.binding-keys {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-sm);
+}
+.cap-remove {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.cap-remove:hover .cap {
+  background: linear-gradient(#4a3530, #3c2b27 70%);
+  text-decoration: line-through;
+}
+.add,
+.listening {
+  min-height: 22px;
+  padding: 2px 8px;
+  line-height: 1.2;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  box-shadow: inset 0 0 0 1px var(--plate-line);
+  color: var(--legend-dim);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.add:hover {
+  color: var(--legend);
+}
+.listening {
+  box-shadow: inset 0 0 0 1px var(--honey);
+  color: var(--honey);
+}
+.toggle-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+}
+.toggle-cell .switch {
+  width: 36px;
+  height: 20px;
+}
+.toggle-cell .switch::after {
+  width: 16px;
+  height: 14px;
+}
+.toggle-cell .switch[aria-checked='true']::after {
+  translate: 14px 0;
+}
+.binding > .glyph {
+  justify-self: start;
+}
+/* Narrow list: keys move under the label instead of being squeezed. */
+@container (max-width: 560px) {
+  .binding {
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    row-gap: 6px;
+  }
+  .binding > .glyph {
+    grid-row: 1 / span 2;
+  }
+  .binding-keys {
+    grid-column: 2 / -1;
+    grid-row: 2;
+  }
+}
+
+/* A column, not a grid: a closed reveal cancels its gap with a negative margin, which
+   a grid row cannot shrink below zero. */
+.sliders,
+.sliders .reveal-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sliders {
+  --reveal-gap: 14px;
+  margin: 14px 0;
+}
+.segmented {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  margin: 0 0 10px;
+  padding: 3px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--well);
+}
+.segmented button {
+  flex: 1;
+  min-height: 30px;
+  padding: 4px 10px;
+  line-height: 1.2;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--legend-dim);
+  font-size: var(--text-sm);
+  font-weight: 560;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  transition: color 160ms ease;
+}
+.segmented button:hover:not(:disabled) {
+  color: var(--legend);
+}
+.segmented button[aria-pressed='true'] {
+  color: var(--legend);
+}
+.segmented button:disabled {
+  cursor: default;
+}
+.segmented .thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--thumb-w, 0);
+  height: var(--thumb-h, 0);
+  translate: var(--thumb-x, 0) var(--thumb-y, 0);
+  border-radius: 6px;
+  background: linear-gradient(var(--cap-top), var(--cap) 70%);
+  box-shadow: inset 0 -2px 0 var(--cap-edge);
+  opacity: 0;
+  pointer-events: none;
+}
+.segmented.has-thumb .thumb {
+  opacity: 1;
+}
+.segmented.thumb-ready .thumb {
+  transition:
+    translate var(--glide-ms) var(--glide),
+    width var(--glide-ms) var(--glide);
+}
+/* A starting point that appears once a game is picked. */
+.start-option {
+  animation: settle var(--glide-ms) var(--glide) both;
+}
+.inline-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-sm);
+}
+.panel p.small {
+  margin: 0 0 6px;
+}
+
+.curve {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  margin: 0 0 14px;
+}
+.curve svg {
+  width: 132px;
+  height: 132px;
+}
+.curve-frame {
+  fill: var(--well);
+}
+.curve-linear {
+  stroke: var(--plate-line);
+  stroke-dasharray: 3 3;
+}
+.curve-line {
+  fill: none;
+  stroke: var(--honey);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+}
+.curve figcaption {
+  font-size: var(--text-xs);
+}
+
+/* Controller drawing */
+.controller {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.controller .body {
+  fill: var(--well);
+  stroke: var(--plate-line);
+  stroke-width: 1.5;
+}
+.controller text {
+  fill: var(--legend-dim);
+  font: 650 8px var(--font);
+  text-anchor: middle;
+  pointer-events: none;
+}
+.controller .well,
+.controller .stick-well {
+  fill: #1f2126;
+  stroke: var(--plate-line);
+}
+.controller .fill {
+  fill: var(--honey);
+}
+.controller .key {
+  fill: var(--cap);
+  stroke: var(--cap-edge);
+}
+.controller .lit .key,
+.controller .key.lit {
+  fill: var(--honey);
+}
+.controller .stick-cap {
+  fill: var(--cap-top);
+  stroke: var(--cap-edge);
+  stroke-width: 2;
+}
+.controller .stick-cap.lit {
+  fill: var(--honey);
+}
+.controller .face-btn {
+  fill: var(--well);
+  stroke-width: 1.6;
+}
+.controller .pickable {
+  cursor: pointer;
+}
+.controller .pickable:hover .key,
+.controller .pickable:hover .stick-well,
+.controller .pickable:hover .face-btn,
+.controller .key.pickable:hover {
+  stroke: var(--legend);
+}
+.controller .selected .key,
+.controller .selected .stick-well,
+.controller .selected .face-btn,
+.controller .key.selected {
+  stroke: var(--honey);
+  stroke-width: 2;
+}
+
+.tryit {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--case);
+  box-shadow: inset 0 0 0 1px var(--plate-line);
+  cursor: pointer;
+}
+.tryit.focused {
+  box-shadow: inset 0 0 0 1px var(--legend-faint);
+}
+.tryit.captured {
+  box-shadow: inset 0 0 0 2px var(--honey);
+  cursor: none;
+}
+.tryit:focus-visible {
+  box-shadow: var(--focus);
+}
+.tryit-hint {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--legend-dim);
+}
+
+/* Games */
+.search {
+  max-width: 420px;
+  margin-top: 6px;
+}
+.game-list {
+  display: grid;
+  max-width: 980px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.game-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 260px;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 4px;
+  border-top: 1px solid var(--plate-line);
+}
+.rank {
+  font-size: var(--text-sm);
+  text-align: right;
+}
+.game-name {
+  display: grid;
+  min-width: 0;
+}
+.game-name > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 560;
+}
+.game-row .select {
+  width: 100%;
+}
+.more {
+  margin-top: 16px;
+}
+
+/* Settings */
+.settings {
+  display: grid;
+  gap: 16px;
+  max-width: 760px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 0;
+  border-top: 1px solid var(--plate-line);
+}
+.panel h2 + .row {
+  border-top: 0;
+  padding-top: 0;
+}
+.row-text {
+  display: grid;
+  gap: 2px;
+}
+.row-text small {
+  font-size: var(--text-xs);
+}
+.row-actions {
+  display: flex;
+  gap: 8px;
+}
+.about p {
+  margin: 0 0 10px;
+  max-width: 64ch;
+}
+
+/* Welcome */
+.welcome {
+  display: grid;
+  gap: 36px;
+  max-width: 940px;
+}
+.welcome-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.welcome-brand h1 {
+  margin: 0;
+  font-size: 72px;
+  font-weight: 400;
+}
+.welcome-brand p {
+  margin: 6px 0 0;
+}
+.welcome-intro {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 40px;
+}
+.welcome-intro h2 {
+  margin: 0 0 12px;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  max-width: 17ch;
+  text-wrap: balance;
+}
+.welcome-intro p {
+  max-width: 52ch;
+  margin: 0;
+}
+.demo-board {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 8px;
+  padding: 18px 18px 30px;
+  border-radius: 16px;
+  background: var(--well);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 2px 0 #101114;
+}
+.demo-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 8px;
+}
+.demo-row.offset {
+  padding-left: 18px;
+}
+.demo-row.space {
+  padding-left: 60px;
+}
+.demo-board .cap {
+  min-width: 52px;
+  height: 52px;
+  padding-bottom: 5px;
+  border-radius: 9px;
+  font-size: var(--text-lg);
+  box-shadow:
+    inset 0 -5px 0 var(--cap-edge),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.demo-board .cap.down {
+  translate: 0 3px;
+  box-shadow:
+    inset 0 -2px 0 var(--cap-edge),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.demo-board .cap.accent {
+  box-shadow:
+    inset 0 -5px 0 var(--honey-deep),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.demo-row.space .cap {
+  min-width: 180px;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.steps li {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 8px;
+}
+.steps h2 {
+  margin: 4px 0 0;
+}
+.steps p {
+  margin: 0;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+.facts p {
+  margin: 0 0 10px;
+}
+.welcome > .btn {
+  justify-self: start;
+  text-decoration: none;
+}
+
+@media (max-width: 1100px) {
+  .editor-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .side {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .studio {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rail {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .rail ul {
+    display: flex;
+  }
+  .rail-foot {
+    display: none;
+  }
+  .stage {
+    padding: 20px 16px 40px;
+  }
+  .presets,
+  .welcome-intro,
+  .steps,
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .preset-list {
+    position: static;
+    max-height: none;
+  }
+  .game-row {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+  .game-row .select {
+    grid-column: 2;
+  }
+}
+
+/* Settings choices that sit in a row */
+.segmented.compact {
+  flex: none;
+  margin: 0;
+}
+.segmented.compact button {
+  flex: none;
+  padding: 4px 12px;
+}
+
+/* Make a preset */
+.create {
+  display: grid;
+  gap: 24px;
+  max-width: 820px;
+}
+.create-steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.create-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  padding: 18px;
+  border-radius: var(--r-panel);
+  background: var(--plate);
+  animation: settle 300ms var(--ease) both;
+}
+.create-step:nth-child(2) {
+  animation-delay: 60ms;
+}
+/* The step being typed in stays above the next one, so its game list is not covered. */
+.create-step:focus-within {
+  z-index: 2;
+}
+.create-step:nth-child(3) {
+  animation-delay: 120ms;
+}
+.create-body {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.create-body h2,
+.create-body p {
+  margin: 0;
+}
+.start-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.start-option {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--well);
+  box-shadow: inset 0 0 0 1px var(--plate-line);
+  cursor: pointer;
+  transition:
+    box-shadow 120ms var(--ease),
+    background-color 120ms var(--ease),
+    translate 160ms var(--ease);
+}
+.start-option:hover {
+  translate: 0 -1px;
+  box-shadow: inset 0 0 0 1px #40444e;
+}
+.start-option.chosen {
+  background: #2a2416;
+  box-shadow: inset 0 0 0 1.5px var(--honey);
+}
+.start-option:focus-visible {
+  box-shadow: var(--focus);
+}
+.start-title {
+  font-weight: 680;
+}
+.start-option .select {
+  width: 100%;
+  margin-top: 4px;
+}
+.name-field {
+  width: min(100%, 420px);
+}
+.create-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+
+/* Game search */
+.picker {
+  position: relative;
+  max-width: 460px;
+}
+.picker .field {
+  width: 100%;
+}
+.picker-results {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  display: grid;
+  gap: 2px;
+  max-height: 320px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px;
+  border-radius: 10px;
+  background: var(--case);
+  box-shadow:
+    0 0 0 1px var(--plate-line),
+    0 3px 0 var(--cap-edge);
+  list-style: none;
+  animation: settle 140ms var(--ease) both;
+}
+/* In the scrolling side column the list pushes content down instead of floating. */
+.side .picker-results {
+  position: static;
+  margin-top: 6px;
+}
+.picker-note {
+  padding: 4px 8px 2px;
+  font-size: var(--text-xs);
+}
+.picker-item {
+  display: grid;
+  gap: 1px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.picker-item.active {
+  background: var(--plate);
+}
+.picker-item:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.picker-title {
+  overflow-wrap: anywhere;
+}
+
+/* Chosen games */
+.game-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+.create-body .game-chips {
+  margin: 0;
+}
+.game-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  padding: 3px 4px 3px 10px;
+  border-radius: 14px;
+  background: var(--well);
+  box-shadow: inset 0 0 0 1px var(--plate-line);
+  font-size: var(--text-sm);
+  animation: pop 160ms var(--ease) both;
+}
+.game-chip span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.game-chip button {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--legend-dim);
+  cursor: pointer;
+}
+.game-chip button:hover {
+  background: var(--plate);
+  color: var(--legend);
+}
+
+/* Guide shown once after making a preset */
+.guide {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 18px;
+  padding: 14px 16px;
+  border-radius: var(--r-panel);
+  background: linear-gradient(90deg, #2a2416, var(--plate));
+  box-shadow: inset 3px 0 0 var(--honey);
+}
+.guide p {
+  max-width: 72ch;
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+/* Why the controls of a built-in preset are locked, and the way out */
+.locked-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 8px 8px 8px 12px;
+  border-radius: 8px;
+  background: var(--well);
+  font-size: var(--text-sm);
+  color: var(--legend-dim);
+}
+.locked-note p {
+  margin: 0;
+}
+.locked-note .btn {
+  flex: none;
+  white-space: nowrap;
+}

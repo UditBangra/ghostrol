@@ -1,0 +1,25 @@
+{
+  "name": {
+    "message": "Ghostrol: Keyboard and Mouse for Xbox Cloud Gaming",
+    "description": "Store and browser name. Brand first, then what it does."
+  },
+  "shortName": {
+    "message": "Ghostrol"
+  },
+  "description": {
+    "message": "Play any Xbox Cloud Gaming game with your keyboard and mouse. Free, open source, presets for every game.",
+    "description": "Store summary, 132 characters at most."
+  },
+  "actionTitle": {
+    "message": "Ghostrol"
+  },
+  "commandToggle": {
+    "message": "Turn the virtual controller on or off"
+  },
+  "commandNextPreset": {
+    "message": "Switch to the next preset for this game"
+  },
+  "commandControls": {
+    "message": "Show or hide the controls for this game"
+  }
+}
