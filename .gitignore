@@ -4,3 +4,30 @@ release/
 .cache/
 *.log
 .DS_Store
+
+# Extension signing keys: never publish
+*.pem
+*.crx
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Tool output
+.vercel/
+coverage/
+test-results/
+playwright-report/
+
+# Personal settings
+.claude/settings.local.json
+CLAUDE.local.md
+.vscode/
+.idea/
+
+# Windows and editor clutter
+Thumbs.db
+desktop.ini
+*.tmp
+*.swp
