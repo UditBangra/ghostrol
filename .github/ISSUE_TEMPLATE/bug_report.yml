@@ -1,0 +1,57 @@
+# Field ids are filled in by "Report a problem" in the popup (src/shared/report.ts).
+name: Something doesn't work
+description: A game plays wrong, a key does nothing, or something looks broken.
+labels: [bug]
+body:
+  - type: input
+    id: game
+    attributes:
+      label: Game
+      description: The game's name as Xbox Cloud Gaming shows it.
+      placeholder: Forza Horizon 6
+    validations:
+      required: true
+  - type: input
+    id: preset
+    attributes:
+      label: Preset
+      description: The popup shows which preset was in use.
+      placeholder: Forza Horizon
+  - type: textarea
+    id: pressed
+    attributes:
+      label: What you pressed
+      placeholder: Held W, then tapped Space
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: dropdown
+    id: screen
+    attributes:
+      label: Window or full screen
+      options:
+        - Window
+        - Full screen
+        - Both
+        - Not sure
+  - type: input
+    id: version
+    attributes:
+      label: Ghostrol version
+      placeholder: 0.1.0
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and system
+      placeholder: Chrome 142 on Windows
