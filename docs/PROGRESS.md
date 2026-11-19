@@ -1,6 +1,6 @@
 # Progress
 
-Last updated 2026-11-16. Version 0.1.0, not yet released.
+Last updated 2026-11-19. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. Next release must be 0.1.1 or higher.
 
 On 2026-10-31 the owner reset the version to 0.1.0 for the first public release. The earlier internal builds below were also called 0.1.0 and 0.2.0; nothing was published under those numbers. From the first Chrome Web Store upload on, every release needs a higher version than the last.
 

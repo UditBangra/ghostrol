@@ -4,6 +4,6 @@ export const BRAND = {
   name: 'Ghostrol',
   tagline: 'Keyboard and mouse for Xbox Cloud Gaming',
   repoUrl: 'https://github.com/UditBangra/ghostrol',
-  storeUrl: 'https://chromewebstore.google.com/',
+  storeUrl: 'https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj',
   issuesUrl: 'https://github.com/UditBangra/ghostrol/issues',
 } as const;

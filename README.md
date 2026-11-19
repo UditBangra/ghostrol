@@ -17,7 +17,7 @@ Play any Xbox Cloud Gaming (xCloud) game with a keyboard and mouse in Chrome or 
 
 ## Install
 
-**Chrome Web Store:** coming soon.
+**Chrome Web Store:** [Ghostrol on the Chrome Web Store](https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj)
 
 **From GitHub:**
 
