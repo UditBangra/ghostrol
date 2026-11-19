@@ -1,0 +1,23 @@
+name: Why I removed Ghostrol
+description: Tell us what made you uninstall it, so the next version gets it right.
+labels: [uninstall]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking a minute. One honest sentence helps more than a long report.
+  - type: input
+    id: reason
+    attributes:
+      label: Main reason
+    validations:
+      required: true
+  - type: input
+    id: game
+    attributes:
+      label: Game you were playing, if any
+  - type: textarea
+    id: details
+    attributes:
+      label: What happened
+      description: What you pressed, what you expected and what the game did instead.

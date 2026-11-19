@@ -8,6 +8,7 @@ import { builtinPresets, describeGame } from '../data/library';
 import type { ResolveResponse, Shortcuts, ToBackground, ToBridge } from '../shared/messages';
 import { loadState, setAssignment, type StoredState } from '../shared/storage';
 import { editPreset } from '../ui/library';
+import { BRAND } from '../shared/brand';
 
 async function context(): Promise<{ state: StoredState; ctx: ResolveContext }> {
   const state = await loadState();
@@ -112,6 +113,8 @@ chrome.commands.onCommand.addListener(async (command) => {
 chrome.runtime.onInstalled.addListener((details) => {
   void chrome.action.setBadgeBackgroundColor({ color: '#f2b13a' });
   void chrome.action.setBadgeTextColor?.({ color: '#2b1d04' });
+  // Chrome opens this page after removal. The extension itself sends nothing (D32).
+  void chrome.runtime.setUninstallURL(BRAND.uninstallUrl);
   if (details.reason === 'install') {
     void chrome.tabs.create({ url: chrome.runtime.getURL('studio.html#welcome') });
   }

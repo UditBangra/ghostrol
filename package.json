@@ -1,6 +1,6 @@
 {
   "name": "ghostrol",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Play Xbox Cloud Gaming with a keyboard and mouse. Free and open source.",
   "license": "GPL-3.0-only",

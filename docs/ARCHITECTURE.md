@@ -53,7 +53,7 @@ The page script has no framework and never talks to extension APIs. It is about 
 - Holds the catalog and builds the preset map (built-in plus the user's), then runs `resolvePreset`. The catalog index is built on the first lookup, so wakes that only handle a shortcut stay fast (D30).
 - Handles `Alt+K` (toggle), `Alt+Period` (next preset) and `Alt+C` (controls panel) through `chrome.commands`, and sends them to the active tab.
 - Sends the page the presets to offer in the panel and the name Automatic would pick. Applies mouse speed changes from the panel, copying a built-in preset for the game first.
-- Sets the toolbar badge while the virtual pad is active, and opens the welcome page on install.
+- Sets the toolbar badge while the virtual pad is active, and opens the welcome page on install. Sets the uninstall page, ghostrol.com/uninstalled (D32).
 
 ### Popup and Studio (`src/popup`, `src/studio`)
 

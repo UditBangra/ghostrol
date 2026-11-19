@@ -107,3 +107,6 @@ The background worker restarts after every idle period. It used to build the who
 ### D31. Lint and CI
 oxlint (pinned, no configuration) runs in `npm run check` with warnings as errors. It needs no TypeScript plugin, so it keeps working with TypeScript 7. GitHub Actions runs formatting, types, lint, unit tests, build and the browser checks on every push and pull request, and Dependabot proposes dependency updates.
 
+
+### D32. A goodbye page on uninstall, with feedback through GitHub
+On 2026-11-19 the owner asked for a page that opens when someone removes Ghostrol. The background calls `chrome.runtime.setUninstallURL('https://ghostrol.com/uninstalled')` on install and update. Chrome opens that page after removal; the extension itself sends nothing, and the address carries no version, ID or other detail. The page has no script (the site's CSP is `script-src 'none'`), so each reason is a link to the `uninstall.yml` GitHub issue form with the reason filled in, labelled `uninstall`. Feedback therefore arrives as GitHub issues the owner already watches, and nothing new is collected or stored. Given up: people without a GitHub account cannot send a reason. A no-account form would need a form service or a Vercel function with storage, and a privacy page change, so it waits for the owner's decision. The privacy page describes this.

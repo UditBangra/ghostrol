@@ -6,4 +6,5 @@ export const BRAND = {
   repoUrl: 'https://github.com/UditBangra/ghostrol',
   storeUrl: 'https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj',
   issuesUrl: 'https://github.com/UditBangra/ghostrol/issues',
+  uninstallUrl: 'https://ghostrol.com/uninstalled',
 } as const;

@@ -2,7 +2,12 @@
 
 What changed in each release. Every store upload needs a higher version than the last.
 
-## 0.1.0 (not released yet)
+## 0.1.1 (19 November 2026)
+
+- Rate it in the popup now opens Ghostrol's own Chrome Web Store page. In 0.1.0 it opened the store's home page.
+- Removing Ghostrol opens a short page at ghostrol.com asking why, with each reason linked to a pre-filled GitHub form. The extension still sends nothing.
+
+## 0.1.0 (16 November 2026, on the Chrome Web Store 19 November)
 
 First public release.
 

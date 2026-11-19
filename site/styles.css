@@ -505,3 +505,51 @@ img {
     transition: none !important;
   }
 }
+
+/* Uninstall feedback: each reason is a plain link to a pre-filled GitHub form. */
+.doc .reasons {
+  display: grid;
+  gap: 10px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.doc .reasons li + li {
+  margin-top: 0;
+}
+.reason {
+  display: grid;
+  gap: 2px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: var(--case);
+  border: 1px solid var(--line);
+  color: var(--legend);
+  text-decoration: none;
+  transition:
+    border-color 200ms var(--ease),
+    transform 200ms var(--ease),
+    box-shadow 200ms var(--ease);
+}
+.reason strong {
+  font-weight: 650;
+}
+.reason span {
+  color: var(--dim);
+  font-size: 15px;
+}
+.reason:hover,
+.reason:focus-visible {
+  transform: translateX(4px);
+  border-color: rgba(242, 177, 58, 0.45);
+  box-shadow: -3px 0 0 var(--honey);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reason {
+    transition: none;
+  }
+  .reason:hover,
+  .reason:focus-visible {
+    transform: none;
+  }
+}

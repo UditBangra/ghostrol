@@ -1,6 +1,6 @@
 # Progress
 
-Last updated 2026-11-19. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. Next release must be 0.1.1 or higher.
+Last updated 2026-11-19. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is packaged as `release/ghostrol-0.1.1.zip` for upload. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. The next release after 0.1.1 must be higher.
 
 On 2026-10-31 the owner reset the version to 0.1.0 for the first public release. The earlier internal builds below were also called 0.1.0 and 0.2.0; nothing was published under those numbers. From the first Chrome Web Store upload on, every release needs a higher version than the last.
 
@@ -72,7 +72,7 @@ On 2026-10-31 the owner reset the version to 0.1.0 for the first public release.
 - [x] Sliding highlights in every choice and the sidebar; settings slide open when a choice brings them in (D27)
 - [x] Lenis smooth wheel scrolling in the Studio, with guards for wheel bindings and Try it (D27)
 
-### M6. Release: in progress
+### M6. Release: 0.1.0 published, 0.1.1 ready
 
 Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 with no CLA (D28); personal Google and GitHub accounts, non-trader, no trademark or company for now, ghostrol.com bought on Hostinger (D29); no analytics in the extension or on the website; site on Vercel; donations through GitHub Sponsors only, no Support button in the popup; no fairness note and no accessibility pitch in the listing; no Discord; outreach only through the listing and launch posts on r/xcloud, r/XboxGamePass and r/cloudgaming, using the drafts as written.
 
@@ -86,12 +86,16 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 - [x] Report a problem in the popup (pre-filled GitHub issue)
 - [x] `git init` (nothing committed yet)
 - [x] Public repository: https://github.com/UditBangra/ghostrol (links in brand.ts, README and issue config point there; private vulnerability reporting on)
-- [ ] Owner: Chrome Web Store developer account (personal Google account, non-trader) and two-step login on Google and GitHub
+- [x] Chrome Web Store developer account (personal Google account, publisher name Ghostrol, non-trader)
+- [ ] Owner: two-step login on Google, GitHub and Vercel
 - [x] ghostrol.com live on Vercel (project ghostrol, root site/, deploys on every push to main): home page and https://ghostrol.com/privacy; www redirects with 308; DNS A record at Hostinger points to 216.198.79.1
-- [ ] Store screenshots and promo tile from real screenshots, icons from the skull logo; store permission reasons and the Microsoft disclaimer
+- [x] Store screenshots and promo tiles from the real build (`store/`), skull icons, permission reasons and the Microsoft disclaimer
+- [x] Published on the Chrome Web Store (0.1.0, public 2026-11-19)
+- [x] 0.1.1: rating link points to the listing, uninstall page at ghostrol.com/uninstalled (D32)
+- [ ] GitHub Releases for each version, with the zip attached
 - [ ] Import from ModernKit (user's exported presets)
 - [ ] Publish on Microsoft Edge Add-ons as well
-- [ ] Website on Vercel right after launch: home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon
+- [ ] Fuller website (postponed by the owner on 2026-11-19): home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon
 - [ ] Demo video
 - [x] THIRD-PARTY-NOTICES.txt for Preact and Lenis in the zip (owner agreed 2026-11-16)
 
@@ -113,14 +117,13 @@ Found and fixed while testing: blurred shadows over the video stalled frames wit
 
 1. Reload the extension at `chrome://extensions` (or load `dist/`).
 2. Forza Horizon 6: W should give full throttle at once. A and D should still steer smoothly. Menus: arrows, Space, Backspace, Q and E.
-2. Watch the bottom left corner: each key you press shows a chip with its controller button. Switch to Sticks or Both in Studio, Settings.
-3. Hold Alt+C in a race: the keys appear and the game keeps running. Let go and they close. Tap Alt+C: the panel stays, the mouse is free, pick another preset, then Back to game.
-4. Go full screen and repeat step 4. The panel and chips should show in full screen.
-5. Blue Prince: use Ghostrol for it (popup button, or Alt+K), go full screen, play with keys and mouse. The game should stay on controller prompts the whole time. Esc should free the mouse.
-6. Open the popup during a game: controller buttons next to each key, keys light up when pressed in the popup, fire at the edges.
-7. Studio, Make a preset: pick a game, create, change a key, and check it loads when you start that game.
+3. Watch the bottom left corner: each key you press shows a chip with its controller button. Switch to Sticks or Both in Studio, Settings.
+4. Hold Alt+C in a race: the keys appear and the game keeps running. Let go and they close. Tap Alt+C: the panel stays, the mouse is free, pick another preset, then Back to game.
+5. Go full screen and repeat step 4. The panel and chips should show in full screen.
+6. Blue Prince: use Ghostrol for it (popup button, or Alt+K), go full screen, play with keys and mouse. The game should stay on controller prompts the whole time. Esc should free the mouse.
+7. Open the popup during a game: controller buttons next to each key, keys light up when pressed in the popup, fire at the edges.
+8. Studio, Make a preset: pick a game, create, change a key, and check it loads when you start that game.
 9. Alt+K to pause and resume, in full screen too.
-
 10. Where Winds Meet: the prompt to click the game appears, and the mouse looks around after the click.
 11. Open the popup a few times: it should appear at once, with the fire fading in a moment later.
 12. Studio: drag sliders on one of your own presets; on a built-in one they are grey with a Make a copy to edit button.
@@ -139,11 +142,12 @@ Report anything odd with the game name and what you pressed.
 
 ## Next up, in order
 
-1. Owner: GitHub repository and username, Chrome Web Store account, two-step login.
-2. Privacy page on ghostrol.com, then store images, permission reasons and the Microsoft disclaimer.
-3. Import from ModernKit, then publish on Chrome and Edge.
-4. Website right after launch, with per-game pages (`STORE_LISTING.md`).
-5. More tuned presets: Marvel Rivals, Dead by Daylight (survivor and killer), The Witcher 3, Starfield, Kingdom Come: Deliverance II, Fallout 76, Madden NFL, College Football, Gears of War.
+1. Owner: upload 0.1.1 to the Chrome Web Store; two-step login on Google, GitHub and Vercel.
+2. Edge Add-ons, with the same zip.
+3. Launch posts (Reddit), with a short demo video.
+4. Import from ModernKit (the user's exported presets).
+5. More tuned presets: Marvel Rivals, Dead by Daylight (survivor and killer), The Witcher 3, Starfield, Kingdom Come: Deliverance II, Fallout 76, Gang Beasts, Madden NFL, College Football, Gears of War.
 6. Modifier layers (hold a key to remap others, for example Ctrl plus WASD as the D-pad for Helldivers stratagems).
 7. An aim-direction mouse mode for top-down games.
-8. Later, maybe: GeForce NOW support, a Firefox build, translations.
+8. Fuller website with per-game pages (`STORE_LISTING.md`), when the owner wants it.
+9. Later, maybe: GeForce NOW support, a Firefox build, translations.
