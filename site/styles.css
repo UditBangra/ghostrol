@@ -506,30 +506,58 @@ img {
   }
 }
 
-/* Uninstall feedback: each reason is a plain link to a pre-filled GitHub form. */
-.doc .reasons {
+/* Uninstall feedback: a plain form, no script. Each reason is a radio drawn as a card. */
+.feedback {
+  margin-top: 28px;
+  display: grid;
+  gap: 22px;
+}
+.feedback fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.feedback legend,
+.field > span {
+  margin-bottom: 10px;
+  font-weight: 650;
+  color: var(--legend);
+}
+.field em {
+  margin-left: 6px;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--faint);
+  font-size: 14px;
+}
+.reasons {
   display: grid;
   gap: 10px;
-  margin: 28px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.doc .reasons li + li {
-  margin-top: 0;
 }
 .reason {
+  position: relative;
   display: grid;
   gap: 2px;
-  padding: 14px 18px;
+  padding: 14px 18px 14px 50px;
   border-radius: 12px;
   background: var(--case);
   border: 1px solid var(--line);
   color: var(--legend);
-  text-decoration: none;
+  cursor: pointer;
   transition:
     border-color 200ms var(--ease),
     transform 200ms var(--ease),
-    box-shadow 200ms var(--ease);
+    box-shadow 200ms var(--ease),
+    background-color 200ms var(--ease);
+}
+.reason input {
+  position: absolute;
+  left: 18px;
+  top: 17px;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--honey);
 }
 .reason strong {
   font-weight: 650;
@@ -538,18 +566,66 @@ img {
   color: var(--dim);
   font-size: 15px;
 }
-.reason:hover,
-.reason:focus-visible {
+.reason:hover {
   transform: translateX(4px);
   border-color: rgba(242, 177, 58, 0.45);
+}
+.reason:has(input:checked) {
+  border-color: var(--honey);
+  background: var(--plate);
   box-shadow: -3px 0 0 var(--honey);
+}
+.reason:has(input:focus-visible) {
+  outline: 2px solid var(--honey);
+  outline-offset: 2px;
+}
+.field {
+  display: grid;
+}
+.field input,
+.field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--case);
+  border: 1px solid var(--line);
+  color: var(--legend);
+  font: inherit;
+  font-size: 16px;
+  resize: vertical;
+  transition: border-color 200ms var(--ease);
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--faint);
+}
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--honey);
+}
+.feedback button {
+  justify-self: start;
+  cursor: pointer;
+}
+.feedback .small {
+  margin: -8px 0 0;
+  font-size: 14px;
+  color: var(--faint);
+}
+.trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 @media (prefers-reduced-motion: reduce) {
   .reason {
     transition: none;
   }
-  .reason:hover,
-  .reason:focus-visible {
+  .reason:hover {
     transform: none;
   }
 }

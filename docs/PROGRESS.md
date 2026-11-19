@@ -92,7 +92,8 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 - [x] Store screenshots and promo tiles from the real build (`store/`), skull icons, permission reasons and the Microsoft disclaimer
 - [x] Published on the Chrome Web Store (0.1.0, public 2026-11-19)
 - [x] 0.1.1: rating link points to the listing, uninstall page at ghostrol.com/uninstalled (D32)
-- [ ] GitHub Releases for each version, with the zip attached
+- [x] Uninstall feedback form with no account needed, saved privately in UditBangra/ghostrol-feedback (D33); owner adds the token in Vercel
+- [x] GitHub Releases for each version, with the zip attached (v0.1.0, v0.1.1)
 - [ ] Import from ModernKit (user's exported presets)
 - [ ] Publish on Microsoft Edge Add-ons as well
 - [ ] Fuller website (postponed by the owner on 2026-11-19): home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon

@@ -27,55 +27,71 @@
       <p class="updated">Your presets and settings went with it. Nothing was kept anywhere else.</p>
 
       <p class="lead">
-        If you have a minute, tell us why. Pick the closest reason and GitHub opens a short form
-        with it filled in. You need a GitHub account to send it, and you see everything before it
-        is posted.
+        If you have a minute, tell us why. No account and no email needed. Your answer goes
+        straight to the developer and is never shown publicly.
       </p>
 
-      <ul class="reasons">
-          <li>
-            <a class="reason" href="https://github.com/UditBangra/ghostrol/issues/new?template=uninstall.yml&amp;labels=uninstall&amp;title=Removed%3A%20A%20game%20did%20not%20play%20right&amp;reason=A%20game%20did%20not%20play%20right">
-              <strong>A game did not play right</strong><span>Tell us which one. A wrong layout is usually a quick fix.</span>
-            </a>
-          </li>
-          <li>
-            <a class="reason" href="https://github.com/UditBangra/ghostrol/issues/new?template=uninstall.yml&amp;labels=uninstall&amp;title=Removed%3A%20The%20mouse%20felt%20wrong&amp;reason=The%20mouse%20felt%20wrong">
-              <strong>The mouse felt wrong</strong><span>Too fast, too slow, drifting or jumpy aim.</span>
-            </a>
-          </li>
-          <li>
-            <a class="reason" href="https://github.com/UditBangra/ghostrol/issues/new?template=uninstall.yml&amp;labels=uninstall&amp;title=Removed%3A%20It%20felt%20slow%20or%20laggy&amp;reason=It%20felt%20slow%20or%20laggy">
-              <strong>It felt slow or laggy</strong><span>Input arriving late, or the popup taking long to open.</span>
-            </a>
-          </li>
-          <li>
-            <a class="reason" href="https://github.com/UditBangra/ghostrol/issues/new?template=uninstall.yml&amp;labels=uninstall&amp;title=Removed%3A%20Setting%20up%20keys%20was%20confusing&amp;reason=Setting%20up%20keys%20was%20confusing">
-              <strong>Setting up keys was confusing</strong><span>Presets, the Studio or the controls panel.</span>
-            </a>
-          </li>
-          <li>
-            <a class="reason" href="https://github.com/UditBangra/ghostrol/issues/new?template=uninstall.yml&amp;labels=uninstall&amp;title=Removed%3A%20I%20switched%20to%20something%20else&amp;reason=I%20switched%20to%20something%20else">
-              <strong>I switched to something else</strong><span>A controller, another extension or another service.</span>
-            </a>
-          </li>
-          <li>
-            <a class="reason" href="https://github.com/UditBangra/ghostrol/issues/new?template=uninstall.yml&amp;labels=uninstall&amp;title=Removed%3A%20I%20only%20wanted%20to%20try%20it&amp;reason=I%20only%20wanted%20to%20try%20it">
-              <strong>I only wanted to try it</strong><span>Nothing wrong, you were just looking.</span>
-            </a>
-          </li>
-          <li>
-            <a class="reason" href="https://github.com/UditBangra/ghostrol/issues/new?template=uninstall.yml&amp;labels=uninstall&amp;title=Removed%3A%20">
-              <strong>Something else</strong><span>Write it in your own words.</span>
-            </a>
-          </li>
-      </ul>
+      <form class="feedback" method="post" action="/api/feedback">
+        <fieldset>
+          <legend>Main reason</legend>
+          <div class="reasons">
+          <label class="reason">
+            <input type="radio" name="reason" value="A game did not play right" required />
+            <strong>A game did not play right</strong><span>Tell us which one. A wrong layout is usually a quick fix.</span>
+          </label>
+          <label class="reason">
+            <input type="radio" name="reason" value="The mouse felt wrong" />
+            <strong>The mouse felt wrong</strong><span>Too fast, too slow, drifting or jumpy aim.</span>
+          </label>
+          <label class="reason">
+            <input type="radio" name="reason" value="It felt slow or laggy" />
+            <strong>It felt slow or laggy</strong><span>Input arriving late, or the popup taking long to open.</span>
+          </label>
+          <label class="reason">
+            <input type="radio" name="reason" value="Setting up keys was confusing" />
+            <strong>Setting up keys was confusing</strong><span>Presets, the Studio or the controls panel.</span>
+          </label>
+          <label class="reason">
+            <input type="radio" name="reason" value="I switched to something else" />
+            <strong>I switched to something else</strong><span>A controller, another extension or another service.</span>
+          </label>
+          <label class="reason">
+            <input type="radio" name="reason" value="I only wanted to try it" />
+            <strong>I only wanted to try it</strong><span>Nothing wrong, you were just looking.</span>
+          </label>
+          <label class="reason">
+            <input type="radio" name="reason" value="Something else" />
+            <strong>Something else</strong><span>Write it in your own words below.</span>
+          </label>
+          </div>
+        </fieldset>
+
+        <label class="field">
+          <span>Game you were playing, if any</span>
+          <input type="text" name="game" maxlength="80" autocomplete="off" placeholder="Forza Horizon 6" />
+        </label>
+
+        <label class="field">
+          <span>What happened <em>optional</em></span>
+          <textarea name="details" rows="5" maxlength="2000" placeholder="What you pressed, what you expected and what the game did instead."></textarea>
+        </label>
+
+        <label class="trap" aria-hidden="true">
+          Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </label>
+
+        <button class="key honey" type="submit">Send</button>
+        <p class="small">
+          Only what you write here is sent. No name, email, IP address or browser details are kept.
+          See <a href="/privacy">privacy</a>.
+        </p>
+      </form>
 
       <h2>Changed your mind?</h2>
       <p>
-        <a href="https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj">Add Ghostrol again</a>
-        from the Chrome Web Store. If a game played badly, the
-        <a href="https://github.com/UditBangra/ghostrol/issues">issue list</a> may already have a fix
-        or a better preset.
+        <a href="https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj">Add Ghostrol again</a> from the Chrome Web Store. If a game played badly,
+        the <a href="https://github.com/UditBangra/ghostrol/issues">issue list</a> may already have a
+        fix or a better preset.
       </p>
     </main>
 
