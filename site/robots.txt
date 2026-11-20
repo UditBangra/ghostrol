@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /uninstalled
+
+Sitemap: https://ghostrol.com/sitemap.xml

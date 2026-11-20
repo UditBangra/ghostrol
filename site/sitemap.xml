@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <url>
+    <loc>https://ghostrol.com/</loc>
+    <lastmod>2026-11-20</lastmod>
+    <image:image>
+      <image:loc>https://ghostrol.com/img/og.jpg</image:loc>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://ghostrol.com/img/intro-poster.jpg</video:thumbnail_loc>
+      <video:title>I built a free way to play Xbox Cloud Gaming with keyboard and mouse</video:title>
+      <video:description>A 36 second intro to Ghostrol, a free Chrome extension that turns your keyboard and mouse into a virtual Xbox controller for Xbox Cloud Gaming.</video:description>
+      <video:player_loc>https://www.youtube.com/embed/GDyVCLB7WDg</video:player_loc>
+      <video:duration>36</video:duration>
+      <video:publication_date>2026-11-19</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://ghostrol.com/privacy</loc>
+    <lastmod>2026-11-19</lastmod>
+  </url>
+</urlset>

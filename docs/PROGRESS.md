@@ -1,6 +1,6 @@
 # Progress
 
-Last updated 2026-11-19. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is packaged as `release/ghostrol-0.1.1.zip` for upload. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. The next release after 0.1.1 must be higher.
+Last updated 2026-11-19. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is published too (2026-11-20), and the listing has the promo video https://www.youtube.com/watch?v=GDyVCLB7WDg. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. The next release after 0.1.1 must be higher.
 
 On 2026-10-31 the owner reset the version to 0.1.0 for the first public release. The earlier internal builds below were also called 0.1.0 and 0.2.0; nothing was published under those numbers. From the first Chrome Web Store upload on, every release needs a higher version than the last.
 
@@ -97,7 +97,9 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 - [ ] Import from ModernKit (user's exported presets)
 - [ ] Publish on Microsoft Edge Add-ons as well
 - [ ] Fuller website (postponed by the owner on 2026-11-19): home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon
-- [ ] Demo video
+- [x] Demo video: 36 s intro on YouTube (https://www.youtube.com/watch?v=GDyVCLB7WDg), on the store listing, ghostrol.com and the README
+- [x] Technical SEO on ghostrol.com: robots.txt, sitemap with video, canonical tags, structured data (app, video, FAQ), share image, FAQ section, 404 page (D34)
+- [ ] Owner: Google Search Console and Bing Webmaster Tools, sitemap submitted
 - [x] THIRD-PARTY-NOTICES.txt for Preact and Lenis in the zip (owner agreed 2026-11-16)
 
 ## Verification
@@ -143,9 +145,9 @@ Report anything odd with the game name and what you pressed.
 
 ## Next up, in order
 
-1. Owner: upload 0.1.1 to the Chrome Web Store; two-step login on Google, GitHub and Vercel.
+1. Owner: Google Search Console and Bing; two-step login on Google, GitHub and Vercel.
 2. Edge Add-ons, with the same zip.
-3. Launch posts (Reddit), with a short demo video.
+3. Launch posts (Reddit), with the intro video.
 4. Import from ModernKit (the user's exported presets).
 5. More tuned presets: Marvel Rivals, Dead by Daylight (survivor and killer), The Witcher 3, Starfield, Kingdom Come: Deliverance II, Fallout 76, Gang Beasts, Madden NFL, College Football, Gears of War.
 6. Modifier layers (hold a key to remap others, for example Ctrl plus WASD as the D-pad for Helldivers stratagems).

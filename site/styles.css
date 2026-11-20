@@ -629,3 +629,148 @@ img {
     transform: none;
   }
 }
+
+/* Intro video: a poster that links to YouTube, so the page loads nothing from other sites. */
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 44px;
+  align-items: center;
+  margin: 24px 0 72px;
+}
+.intro h2 {
+  margin: 0 0 12px;
+  font-size: 30px;
+  font-weight: 700;
+  font-stretch: 96%;
+}
+.intro p {
+  margin: 0;
+  color: var(--dim);
+}
+.intro .soon {
+  margin-top: 12px;
+}
+.video {
+  position: relative;
+  display: block;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  transition:
+    transform 260ms var(--ease),
+    border-color 260ms var(--ease),
+    box-shadow 260ms var(--ease);
+}
+.video img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.play {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--honey);
+  box-shadow:
+    inset 0 -5px 0 #a8711a,
+    0 0 0 8px rgba(242, 177, 58, 0.18);
+  transition: transform 260ms var(--ease);
+}
+.play::after {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 22px;
+  border-style: solid;
+  border-width: 14px 0 14px 22px;
+  border-color: transparent transparent transparent var(--honey-ink);
+}
+.video:hover,
+.video:focus-visible {
+  transform: translateY(-3px);
+  border-color: rgba(242, 177, 58, 0.45);
+  box-shadow: 0 30px 70px -26px var(--glow);
+}
+.video:hover .play,
+.video:focus-visible .play {
+  transform: scale(1.08);
+}
+
+/* Questions: native details elements, no script. */
+.faq {
+  max-width: 820px;
+  margin: 88px auto 96px;
+}
+.faq h2 {
+  margin: 0 0 20px;
+  font-size: 34px;
+  font-weight: 700;
+  font-stretch: 96%;
+}
+.faq details {
+  border-top: 1px solid var(--line);
+}
+.faq details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.faq summary {
+  position: relative;
+  padding: 20px 44px 20px 0;
+  font-weight: 650;
+  font-size: 19px;
+  color: var(--legend);
+  cursor: pointer;
+  list-style: none;
+  transition: color 200ms var(--ease);
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary::after {
+  content: '+';
+  position: absolute;
+  right: 6px;
+  top: 16px;
+  font-size: 26px;
+  color: var(--honey);
+  transition: transform 260ms var(--ease);
+}
+.faq details[open] summary::after {
+  transform: rotate(45deg);
+}
+.faq summary:hover {
+  color: var(--honey);
+}
+.faq details p {
+  margin: 0 0 22px;
+  color: var(--dim);
+  max-width: 70ch;
+}
+@media (max-width: 760px) {
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .play {
+    right: 12px;
+    bottom: 12px;
+    transform: scale(0.72);
+    transform-origin: bottom right;
+  }
+  .video:hover .play,
+  .video:focus-visible .play {
+    transform: scale(0.78);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .video,
+  .play,
+  .faq summary::after {
+    transition: none;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Ghostrol",
+  "short_name": "Ghostrol",
+  "description": "Keyboard and mouse for Xbox Cloud Gaming.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0f1013",
+  "theme_color": "#0f1013",
+  "icons": [
+    { "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/img/mark-256.png", "sizes": "256x256", "type": "image/png" }
+  ]
+}

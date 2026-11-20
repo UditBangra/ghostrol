@@ -2,6 +2,10 @@
 
 Play any Xbox Cloud Gaming (xCloud) game with a keyboard and mouse in Chrome or Edge. Ghostrol is a free, open-source browser extension that turns your keys and mouse into a virtual Xbox controller. It recognizes the game you launch and loads keys made for it.
 
+[![Watch the 36 second intro on YouTube](https://ghostrol.com/img/intro-poster.jpg)](https://www.youtube.com/watch?v=GDyVCLB7WDg)
+
+[Watch the intro on YouTube](https://www.youtube.com/watch?v=GDyVCLB7WDg) · [ghostrol.com](https://ghostrol.com)
+
 ## What it does
 
 - **Works with every cloud game.** The game sees a normal Xbox controller, so it does not need its own mouse support.
