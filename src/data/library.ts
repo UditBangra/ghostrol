@@ -2,7 +2,7 @@
 
 import type { PageGame } from '../core/detect';
 import { slugToTitle } from '../core/detect';
-import type { GameInfo } from '../core/resolve';
+import { remotePlayGame, type GameInfo } from '../core/resolve';
 import { normalizeTitle } from '../core/titles';
 import { archetypeForGenres, gameById, gameByTitle } from './catalog';
 import { tunedPresetIds } from './presets';
@@ -11,7 +11,8 @@ export { builtinPresets, isBuiltinId, tunedPresetIds } from './presets';
 
 /** Identifies the game on a page from its product ID, falling back to the URL slug. */
 export function describeGame(page: PageGame | null): GameInfo | null {
-  if (!page || page.kind === 'remote') return null;
+  if (!page) return null;
+  if (page.kind === 'remote') return remotePlayGame();
   const entry = page.productId ? gameById(page.productId) : undefined;
   const slugTitle = page.slug ? slugToTitle(page.slug) : undefined;
   const fromSlug = !entry && slugTitle ? gameByTitle(slugTitle) : undefined;

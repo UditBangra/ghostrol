@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { isInputCode, RESERVED_CODES } from '../src/core/inputs';
 import { fromPresetFile, sanitizePreset, toPresetFile, usesMouse } from '../src/core/preset';
-import { candidatePresets, resolvePreset, type GameInfo } from '../src/core/resolve';
+import {
+  candidatePresets,
+  REMOTE_PLAY_KEY,
+  resolvePreset,
+  type GameInfo,
+} from '../src/core/resolve';
 import { normalizeTitle } from '../src/core/titles';
 import { ARCHETYPE_IDS } from '../src/data/archetypes';
 import { allGames, archetypeForGenres, gameById } from '../src/data/catalog';
@@ -33,6 +38,7 @@ describe('built-in presets', () => {
   it('match at least one game in the cloud catalog', () => {
     const catalogKeys = new Set(allGames().map((g) => normalizeTitle(g.title)));
     for (const spec of GAMES) {
+      if (spec.consoleOnly) continue;
       const matched = spec.titles.some((t) => catalogKeys.has(normalizeTitle(t)));
       expect(matched, `${spec.name} matches no catalog title`).toBe(true);
     }
@@ -144,6 +150,64 @@ describe('game detection and resolution', () => {
     expect(ids[0]).toBe('game:forza-horizon');
     expect(ids).toContain('layout:racing');
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  describe('Remote Play', () => {
+    const remote = describeGame({ kind: 'remote' })!;
+    const gta = 'game:gta-6';
+    const driving = 'game:gta-6:driving';
+
+    it('stands in for a game so a pick can be remembered', () => {
+      expect(remote).toMatchObject({ key: REMOTE_PLAY_KEY, title: 'Remote Play', remote: true });
+    });
+
+    it('uses your default until you pick, never a genre guess', () => {
+      expect(resolvePreset(remote, { ...ctx, defaultPresetId: 'layout:racing' })).toMatchObject({
+        reason: 'default',
+        preset: { id: 'layout:racing' },
+      });
+    });
+
+    it('remembers the preset picked for it', () => {
+      const result = resolvePreset(remote, { ...ctx, assignments: { [REMOTE_PLAY_KEY]: gta } });
+      expect(result).toMatchObject({ reason: 'assigned', preset: { id: gta } });
+    });
+
+    it('offers every preset once: yours, then games, then genres', () => {
+      const mine = { ...presets.get('layout:shooter')!, id: 'user:mine', name: 'Mine' };
+      const all = new Map(presets).set(mine.id, mine);
+      const ids = candidatePresets(remote, { ...ctx, presets: all }, [mine]).map((p) => p.id);
+      expect(ids.slice(0, 2)).toEqual(['layout:action', 'user:mine']);
+      expect(new Set(ids)).toEqual(new Set(all.keys()));
+      expect(ids.length).toBe(all.size);
+      expect(ids.indexOf(gta)).toBeLessThan(ids.indexOf('layout:shooter'));
+    });
+
+    it('keeps the picked game preset next to its other variants', () => {
+      for (const [picked, next] of [
+        [driving, gta],
+        [gta, driving],
+      ]) {
+        const ids = candidatePresets(
+          remote,
+          { ...ctx, assignments: { [REMOTE_PLAY_KEY]: picked! } },
+          [],
+        ).map((p) => p.id);
+        expect(ids.slice(0, 2)).toEqual([picked, next]);
+      }
+    });
+  });
+
+  it('drives GTA 6 with W and S only in the driving preset', () => {
+    const foot = presets.get('game:gta-6')!;
+    const car = presets.get('game:gta-6:driving')!;
+    expect(foot.bindings.lsUp).toEqual(['KeyW']);
+    expect(foot.bindings.rt).toEqual(['Mouse0']);
+    expect(car.bindings.rt).toEqual(['KeyW']);
+    expect(car.bindings.lt).toEqual(['KeyS']);
+    expect(car.bindings.lsUp).toBeUndefined();
+    expect(car.bindings.lsLeft).toEqual(['KeyA']);
+    expect(car.name).toBe('GTA 6 (driving)');
   });
 
   it('maps genres to layouts', () => {

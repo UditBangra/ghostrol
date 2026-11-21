@@ -1,6 +1,7 @@
 import { Fragment } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { usesMouse, type Preset } from '../core/preset';
+import { isPlaying } from '../core/detect';
 import { candidatePresets } from '../core/resolve';
 import type { Target } from '../core/targets';
 import { TARGET_NAMES } from '../core/targets';
@@ -183,14 +184,14 @@ function autoId(
   game: NonNullable<SessionInfo['game']>,
   ctx: Parameters<typeof candidatePresets>[1],
 ): string {
-  if (!ctx.autoDetect) return ctx.defaultPresetId;
+  if (!ctx.autoDetect || game.remote) return ctx.defaultPresetId;
   return game.tunedIds[0] ?? `layout:${game.archetype}`;
 }
 
 function statusLine(session: SessionInfo, preset: Preset | undefined): string {
   if (session.mode === 'off') return session.paused ? 'Paused for this tab' : 'Turned off';
   if (session.mode === 'native') return 'Using the game’s own mouse and keyboard';
-  if (session.page?.kind !== 'stream') return 'Starts when you launch the game';
+  if (!isPlaying(session.page)) return 'Starts when you launch the game';
   if (session.status.handedOff) return 'A controller is in use. Press a key to switch back';
   if (session.status.captured) return 'Mouse captured. Esc lets go';
   if (preset && !usesMouse(preset)) return 'This preset plays with keys only';

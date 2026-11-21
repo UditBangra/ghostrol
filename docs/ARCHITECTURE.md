@@ -72,7 +72,7 @@ Handlers only record events. `sample(now)` computes the controller state when th
 
 ## Game detection and preset choice
 
-1. `parseGameUrl` finds the 12-character store product ID next to a route word (`launch`, `stream`, `games`) and the slug, in either order. Remote Play URLs are recognized separately.
+1. `parseGameUrl` finds the 12-character store product ID next to a route word (`launch`, `stream`, `games`) and the slug, in either order. Remote Play URLs are recognized separately; they have no game ID, so `describeGame` returns a Remote Play stand-in that remembers the player's pick (D35).
 2. `describeGame` looks the ID up in the catalog (title, genres, popularity rank, native mouse support). Unknown IDs fall back to the slug, matched by normalized title. `archetypeForGenres` picks the genre layout; Fighting listed after Action & adventure or Role playing does not count (D24).
 3. `resolvePreset` picks, in order: the user's choice for this game, a tuned preset for its title, the genre layout, then the default.
 

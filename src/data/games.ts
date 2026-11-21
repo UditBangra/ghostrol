@@ -33,6 +33,11 @@ export interface GameSpec {
   notes?: string;
   /** Extra presets for the same game, such as a second role. */
   variant?: string;
+  /**
+   * The game is not on Xbox Cloud Gaming, so it is played through Remote Play from the
+   * user's own console, where the preset is picked by hand. Exempt from the catalog check.
+   */
+  consoleOnly?: boolean;
 }
 
 /** Looking around on I, J, K and L, which leaves the arrow keys free for menus. */
@@ -647,6 +652,105 @@ export const GAMES: readonly GameSpec[] = [
       view: 'First / third person',
       menu: 'Pause',
     },
+  },
+  {
+    // On foot. Driving has its own preset below, so W and S can drive.
+    slug: 'gta-6',
+    name: 'GTA 6',
+    titles: ['Grand Theft Auto VI'],
+    consoleOnly: true,
+    base: 'action',
+    bindings: {
+      rt: ['Mouse0'],
+      lt: ['Mouse2'],
+      a: ['Space'],
+      b: ['KeyC', 'ControlLeft'],
+      x: ['KeyR'],
+      y: ['KeyF', 'KeyE'],
+      lb: ['Tab'],
+      rb: ['KeyQ'],
+      ls: ['ShiftLeft'],
+      rs: ['Mouse1', 'KeyV'],
+      dpadUp: ['ArrowUp', 'Digit1'],
+      dpadDown: ['ArrowDown', 'Digit3', 'KeyZ'],
+      dpadLeft: ['ArrowLeft', 'Digit4'],
+      dpadRight: ['ArrowRight', 'Digit2', 'KeyG'],
+      view: ['KeyM'],
+      menu: ['Enter', 'KeyP'],
+    },
+    labels: {
+      rt: 'Shoot (car: accelerate)',
+      lt: 'Aim (car: brake / reverse)',
+      a: 'Jump / climb',
+      b: 'Crouch (hold: rest)',
+      x: 'Melee (hold: heavy attack)',
+      y: 'Interact / enter vehicle',
+      lb: 'Loadout (hold)',
+      rb: 'Take cover',
+      ls: 'Run',
+      rs: 'Zoom / throw path',
+      dpadUp: 'Phone (hold: WAiNK)',
+      dpadDown: 'Objective (hold: quick nav)',
+      dpadLeft: 'Radio (hold: radio menu)',
+      dpadRight: 'Partner menu (hold) / detonate',
+      view: 'Map',
+      menu: 'Pause',
+      precision: 'Walk',
+    },
+    notes:
+      'Press Shift once to run. To drive with W and S, switch to GTA 6 (driving) with the next preset shortcut.',
+  },
+  {
+    slug: 'gta-6',
+    variant: 'driving',
+    name: 'GTA 6',
+    titles: ['Grand Theft Auto VI'],
+    consoleOnly: true,
+    base: 'action',
+    bindings: {
+      rt: ['KeyW'],
+      lt: ['KeyS'],
+      a: ['Space'],
+      b: ['ControlLeft', 'KeyC'],
+      x: ['KeyR'],
+      y: ['KeyF'],
+      lb: ['Mouse2'],
+      rb: ['Mouse0'],
+      ls: ['KeyE', 'ShiftLeft'],
+      rs: ['Mouse1', 'KeyV'],
+      dpadUp: ['ArrowUp', 'Digit1'],
+      dpadDown: ['ArrowDown', 'Digit3', 'KeyZ'],
+      dpadLeft: ['ArrowLeft', 'Digit4', 'KeyQ'],
+      dpadRight: ['ArrowRight', 'Digit2'],
+      view: ['KeyM'],
+      menu: ['Enter', 'KeyP'],
+      precision: ['AltLeft'],
+    },
+    labels: {
+      rt: 'Accelerate',
+      lt: 'Brake / reverse',
+      lsLeft: 'Steer left',
+      lsRight: 'Steer right',
+      a: 'Handbrake',
+      b: 'Duck (hold)',
+      x: 'Hit with door / kick',
+      y: 'Exit vehicle (hold: stop first)',
+      lb: 'Draw sidearm (hold: vehicle weapon)',
+      rb: 'Shoot',
+      ls: 'Horn / nitrous',
+      rs: 'Yell',
+      dpadUp: 'Phone',
+      dpadDown: 'Vehicle info',
+      dpadLeft: 'Vehicle menu (hold)',
+      dpadRight: 'Partner menu (hold)',
+      view: 'Map',
+      menu: 'Pause',
+      precision: 'Gentle steering',
+    },
+    // Ease steering in like the racing layout; throttle and brake stay instant.
+    analog: { stickRampMs: 150, triggerRampMs: 0 },
+    notes:
+      'Right click draws your sidearm and left click shoots. Switch back to GTA 6 with the next preset shortcut when you get out.',
   },
   {
     slug: 'nba-2k',

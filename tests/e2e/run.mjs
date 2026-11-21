@@ -334,6 +334,39 @@ try {
   await worker.evaluate(() => chrome.storage.sync.remove('assignments'));
   await winds.close();
 
+  // Remote Play: no game ID in the URL. The pad still appears, the default preset is used
+  // until the player picks, a pick is remembered, and the next preset shortcut flips
+  // between a game's presets (GTA 6 driving and on foot).
+  const remote = await context.newPage();
+  await remote.goto('https://www.xbox.com/en-US/play/consoles/launch/F4001ABCDEF12345');
+  await remote.bringToFront();
+  check('Remote Play gets the virtual controller', !!(await until(() => remote.evaluate(() => window.readPad()), 10000)));
+  await remote.keyboard.down('KeyW');
+  const walk = await remote.evaluate(() => window.readPad());
+  await remote.keyboard.up('KeyW');
+  check('Remote Play starts on the default preset (W walks)', walk.axes[1] < 0 && walk.buttons[7] === 0);
+  await worker.evaluate(() =>
+    chrome.storage.sync.set({ assignments: { ':remote-play': 'game:gta-6:driving' } }),
+  );
+  const drives = await until(async () => {
+    await remote.keyboard.down('KeyW');
+    const pad = await remote.evaluate(() => window.readPad());
+    await remote.keyboard.up('KeyW');
+    return pad.buttons[7] === 1;
+  });
+  check('a preset picked for Remote Play is used (GTA 6 driving: W accelerates)', drives);
+  await remote.waitForTimeout(100);
+  await remote.keyboard.down('AltLeft');
+  await remote.keyboard.press('Period');
+  await remote.keyboard.up('AltLeft');
+  const flipped = await until(async () => {
+    const { assignments } = await worker.evaluate(() => chrome.storage.sync.get('assignments'));
+    return assignments?.[':remote-play'] === 'game:gta-6';
+  });
+  check('Alt+Period in Remote Play flips GTA 6 from driving to on foot', flipped);
+  await worker.evaluate(() => chrome.storage.sync.remove('assignments'));
+  await remote.close();
+
   // A game with native mouse support: the extension should stand by.
   const native = await context.newPage();
   await native.goto('https://www.xbox.com/en-US/play/launch/fortnite/BT5P2X999VH2');

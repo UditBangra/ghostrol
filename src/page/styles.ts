@@ -291,7 +291,7 @@ b { font-weight: 650; font-stretch: 112%; }
 .row .what { min-width: 0; overflow-wrap: anywhere; font-size: 13px; }
 .side { display: grid; align-content: start; gap: 18px; min-height: 0; overflow: auto; padding: 14px 16px 18px; border-left: 1px solid var(--plate-line); background: #191b1f; }
 .side h3 { margin: 0 0 6px; color: var(--legend-faint); font-size: 12px; font-weight: 650; }
-.choices { display: grid; gap: 2px; }
+.choices { display: grid; gap: 2px; max-height: 296px; overflow-y: auto; }
 .choice {
   display: flex;
   align-items: center;

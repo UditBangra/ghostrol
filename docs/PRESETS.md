@@ -43,6 +43,7 @@ Keys follow each game's own PC defaults where the game has a PC version, so PC p
 | Skyrim | Skyrim Special Edition | Xbox 360 manual (same layout), UESP control names |
 | Fallout 4 | Fallout 4 | Fextralife wiki, the official game manual |
 | NBA 2K | NBA 2K27, NBA 2K26 | keymap.io (controller only; keys follow the sports layout) |
+| GTA 6 (on foot) and GTA 6 (driving) | Grand Theft Auto VI (console only, for Remote Play) | gtabase.com controls guide (from the in-game control screens, updated 2026-11-20), insider-gaming.com (2026-11-18); both agree on every default button. No PC version, so keys follow GTA V's PC defaults (D35) |
 
 ## Waiting for verification
 
@@ -62,6 +63,6 @@ Players spend a lot of time in menus, which games navigate with the D-pad, A, B 
 1. Find the game's default Xbox controller layout from at least one reliable source, plus its PC keyboard defaults if it has a PC version.
 2. Add a `GameSpec` to `GAMES` in `src/data/games.ts`. Pick the closest `base` layout, then set only what differs. Keys you use are removed from other base targets automatically, so a key never does two things by accident.
 3. Use the game's own words for labels, at most 40 characters.
-4. List every store title the preset should match in `titles`. Editions match automatically.
+4. List every store title the preset should match in `titles`. Editions match automatically. A game that is not on Xbox Cloud Gaming (played through Remote Play) sets `consoleOnly: true`; players pick its preset by hand there.
 5. Run `npm test`. A test fails if any title does not match a catalog game, any key is invalid, or any label points at an unbound control.
 6. Add the game and its source to the table above.

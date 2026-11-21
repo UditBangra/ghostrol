@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
+import { REMOTE_PLAY_KEY, remotePlayGame } from '../core/resolve';
 import { normalizeTitle } from '../core/titles';
 import { archetypeName } from '../data/archetypes';
 import { allGames, archetypeForGenres, gameByTitle, type CatalogGame } from '../data/catalog';
@@ -15,6 +16,7 @@ const SHOWN = 6;
 
 /** The title to show for a stored game key. */
 export function gameTitle(key: string, recent: readonly RecentGame[] = []): string {
+  if (key === REMOTE_PLAY_KEY) return remotePlayGame().title;
   return gameByTitle(key)?.title ?? recent.find((r) => r.key === key)?.title ?? key;
 }
 
@@ -36,6 +38,11 @@ function search(query: string): PickedGame[] {
     const entry = { key, title: game.title, game };
     seen.set(key, entry);
     (key.startsWith(q) ? starts : contains).push(entry);
+  }
+  // Remote Play is not a game, but a preset can be picked for it like one.
+  const remote = remotePlayGame();
+  if (q && normalizeTitle(remote.title).startsWith(q)) {
+    starts.unshift({ key: remote.key, title: remote.title });
   }
   return [...starts, ...contains].slice(0, SHOWN);
 }
