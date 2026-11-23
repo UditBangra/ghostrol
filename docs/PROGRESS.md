@@ -1,6 +1,6 @@
 # Progress
 
-Last updated 2026-11-21. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is published too (2026-11-20), and the listing has the promo video https://www.youtube.com/watch?v=GDyVCLB7WDg. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. The next release after 0.1.1 must be higher.
+Last updated 2026-11-23. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is published too (2026-11-20), and the listing has the promo video https://www.youtube.com/watch?v=GDyVCLB7WDg. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. Versions 0.1.2 (2026-11-21) and 0.1.3 (2026-11-23) followed. The next release must be higher than 0.1.3.
 
 On 2026-10-31 the owner reset the version to 0.1.0 for the first public release. The earlier internal builds below were also called 0.1.0 and 0.2.0; nothing was published under those numbers. From the first Chrome Web Store upload on, every release needs a higher version than the last.
 
@@ -97,7 +97,8 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 - [x] 0.1.2: Remote Play remembers a picked preset, Alt+Period and the panel work there, GTA 6 on foot and driving presets (D35)
 - [x] 0.1.2 on the Chrome Web Store (players reported it on 2026-11-21)
 - [x] 0.1.3: Remote Play at its new address, play.xbox.com/remoteplay/<console> (issue #7); the virtual pad also sends event-driven input, which Xbox can switch on in its new player (D36); game pages on play.xbox.com are recognized
-- [ ] Owner: upload 0.1.3 to the Chrome Web Store and attach the 0.1.2 and 0.1.3 zips to GitHub Releases
+- [x] 0.1.3 on the Chrome Web Store (2026-11-23); the reporters of issues #6 and #7 were asked to try it
+- [ ] Owner: attach the 0.1.2 and 0.1.3 zips to GitHub Releases
 - [ ] Import from ModernKit (user's exported presets)
 - [ ] Publish on Microsoft Edge Add-ons as well
 - [ ] Fuller website (postponed by the owner on 2026-11-19): home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon
@@ -145,6 +146,7 @@ Report anything odd with the game name and what you pressed.
 - **Exclusive mode and site menus:** in exclusive mode the stream's own pointer handlers see nothing, so a menu that only reacts to pointer events (not clicks) would not respond while playing. Clicks still work.
 - **Native detection:** if the site asks for Pointer Lock in a game without native support, we stand by needlessly. Alt+K overrides it per game.
 - **Two xbox.com sites:** since about 2026-11-21 players get either the old site or the rebuilt one on play.xbox.com (RESEARCH, the rebuilt site). Not yet tested signed in on the new site by us. The origin trial behind event-driven input expires 2026-12-08; if Chrome ships the event, the D36 path stays in use. If the site ever polls controllers inside a Web Worker by default, the virtual pad cannot reach it.
+- **Playwright held at 1.64.1:** Smart App Control on the owner's laptop blocks the Chromium build newer Playwright versions use, so it is pinned and Dependabot skips it (D37). Retry now and then.
 - **Overlay font:** xbox.com's content security policy may block the extension font in the overlay, which then falls back to the system font. Harmless.
 - **Remote Play:** it has no game ID, so it starts on the default preset and remembers what the player picks there (D35). One choice covers all Remote Play games. Not yet tested on a real console by us; the first reports came from Reddit players. In November 2026 Xbox moved it to `play.xbox.com/remoteplay/<console>`, and the old `/play/consoles/launch/` link now redirects there; 0.1.2 missed the new address (issue #7). Both are recognized from 0.1.3.
 

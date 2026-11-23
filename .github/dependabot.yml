@@ -10,6 +10,10 @@ updates:
       dev-tools:
         dependency-type: development
         update-types: [minor, patch]
+    ignore:
+      # Smart App Control on the owner's laptop blocks Playwright 1.65's Chromium (D37).
+      - dependency-name: playwright
+        versions: ['>=1.65.0']
 
   - package-ecosystem: github-actions
     directory: /
