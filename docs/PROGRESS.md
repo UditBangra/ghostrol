@@ -95,7 +95,9 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 - [x] Uninstall feedback form with no account needed, saved privately in UditBangra/ghostrol-feedback (D33); owner adds the token in Vercel
 - [x] GitHub Releases for each version, with the zip attached (v0.1.0, v0.1.1)
 - [x] 0.1.2: Remote Play remembers a picked preset, Alt+Period and the panel work there, GTA 6 on foot and driving presets (D35)
-- [ ] Owner: upload 0.1.2 to the Chrome Web Store and attach the zip to a GitHub Release
+- [x] 0.1.2 on the Chrome Web Store (players reported it on 2026-11-21)
+- [x] 0.1.3: Remote Play at its new address, play.xbox.com/remoteplay/<console> (issue #7); the virtual pad also sends event-driven input, which Xbox can switch on in its new player (D36); game pages on play.xbox.com are recognized
+- [ ] Owner: upload 0.1.3 to the Chrome Web Store and attach the 0.1.2 and 0.1.3 zips to GitHub Releases
 - [ ] Import from ModernKit (user's exported presets)
 - [ ] Publish on Microsoft Edge Add-ons as well
 - [ ] Fuller website (postponed by the owner on 2026-11-19): home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon
@@ -142,8 +144,9 @@ Report anything odd with the game name and what you pressed.
 - **Shortcut conflicts:** a game may use Alt+C. Chrome lets users change the shortcut at `chrome://extensions/shortcuts`, and the page follows whatever is set there.
 - **Exclusive mode and site menus:** in exclusive mode the stream's own pointer handlers see nothing, so a menu that only reacts to pointer events (not clicks) would not respond while playing. Clicks still work.
 - **Native detection:** if the site asks for Pointer Lock in a game without native support, we stand by needlessly. Alt+K overrides it per game.
+- **Two xbox.com sites:** since about 2026-11-21 players get either the old site or the rebuilt one on play.xbox.com (RESEARCH, the rebuilt site). Not yet tested signed in on the new site by us. The origin trial behind event-driven input expires 2026-12-08; if Chrome ships the event, the D36 path stays in use. If the site ever polls controllers inside a Web Worker by default, the virtual pad cannot reach it.
 - **Overlay font:** xbox.com's content security policy may block the extension font in the overlay, which then falls back to the system font. Harmless.
-- **Remote Play:** it has no game ID, so it starts on the default preset and remembers what the player picks there (D35). One choice covers all Remote Play games. Not yet tested on a real console by us; the first reports came from Reddit players.
+- **Remote Play:** it has no game ID, so it starts on the default preset and remembers what the player picks there (D35). One choice covers all Remote Play games. Not yet tested on a real console by us; the first reports came from Reddit players. In November 2026 Xbox moved it to `play.xbox.com/remoteplay/<console>`, and the old `/play/consoles/launch/` link now redirects there; 0.1.2 missed the new address (issue #7). Both are recognized from 0.1.3.
 
 ## Next up, in order
 

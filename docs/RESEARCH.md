@@ -47,9 +47,24 @@ Consequence: in a game with its own mouse support, stopping only mouse events an
 - `https://www.xbox.com/<locale>/play/launch/<slug>/<PRODUCTID>` (cloud stream)
 - `https://play.xbox.com/stream/<PRODUCTID>/<slug>` (cloud stream, newer host)
 - `https://www.xbox.com/<locale>/play/games/<slug>/<PRODUCTID>` (details page)
-- `https://www.xbox.com/<locale>/play/consoles/launch/<CONSOLEID>` (Remote Play)
+- `https://play.xbox.com/game-hub/<PRODUCTID>/<slug>` and `https://play.xbox.com/products/<PRODUCTID>/<slug>` (game and store pages since November 2026)
+- `https://www.xbox.com/<locale>/play/consoles/launch/<CONSOLEID>` (Remote Play, older site)
+- `https://play.xbox.com/remoteplay/<CONSOLEID>` (Remote Play since November 2026; `remoteplay` alone is the console list)
 
 Confirmed by ModernKit's parser (module 92332 of its v4.2.0 bundle) and the route table in the xCloud bundle. Product IDs are 12 alphanumeric characters and differ per edition.
+
+## The rebuilt site on play.xbox.com (read 2026-11-23)
+
+Read from the live bundles (`GameStreamBootstrapper`, `WebRtcStreamV1`, `gameStreamAdapter`, `StreamSessionRequest`, `shared-cone`) and by loading the extension on the real pages signed out (`.cache/live-pages.mjs`).
+
+- **Two sites at once.** The same request to `www.xbox.com/<locale>/play/...` sometimes gets the old site (200) and sometimes a 307 to `play.xbox.com`. Players are split between them, so the old and new addresses must both keep working. Signed out, stream and Remote Play pages on the new site send you to login.live.com.
+- **Routes.** A React Router app with basename `/`. Its manifest (`/assets/manifest-<hash>.js`) lists `stream/:productId/:productName?`, `remoteplay`, `remoteplay/:consoleId`, `game-hub/:productId/:productName?` and `products/:productId/:productName?`. Cloud streams and Remote Play use the same player.
+- **Controller polling.** The player reads `navigator.getGamepads()` on the main thread every 4 ms (`pollGamepadsIntervalMs`). A pad counts when it is standard (4 axes, 16 buttons), it is updated only when its `timestamp` grows, a pad first seen while polling is added on the spot, and buttons are read by `value`.
+- **Event-driven input.** With the remote setting `streaming.session.input.enableEventDrivenGamepadInput` on (default off) and `ongamepadrawinputchanged` in `window`, the player stops reading `getGamepads()` while polling. It only re-sends the last state, takes changes from `gamepadrawinputchanged` events (`event.gamepad`), and reads `getGamepads()` once at start and on window focus. Every xbox.com page carries an origin trial token for `GamepadRawInputChangeEvent` (origin `https://xbox.com`, subdomains included, expires 2026-12-08), so Chrome has the event there; Playwright's Chromium 156 does too. Ghostrol sends the event itself (D36).
+- **Other input modes** (a timer in a worker, or polling moved into a Web Worker that calls `getGamepads()` inside the worker) are chosen only in the site's developer mode. Polling inside a worker would never see the page's `getGamepads`, so watch for it becoming a normal setting.
+- **Menu input.** The site shell polls controllers every 50 ms, only for focused windows, and stops polling a window when it finds no pads. It starts again on `gamepadconnected` or window focus. The shim fires `gamepadconnected` when the virtual pad appears, which restarts it.
+- **Its own mouse and keyboard mode** (`MouseAndKeyboardManager`) needs Pointer Lock and Keyboard Lock permission, device support, and the title's mouse support or a developer setting. It asks for Pointer Lock with `unadjustedMovement` on a click on the stream in full screen, or from its "Return to full screen" toast. Ghostrol's native detection (D6) therefore works as before.
+- **Keys.** The player listens for `keydown` and `keyup` on `window` only when keyboard input is on for the title; the shell listens on `window` in the capture phase for menu navigation. Our capture listener is added at document start, so it runs first.
 
 ## Catalog sources
 

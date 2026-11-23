@@ -26,7 +26,7 @@
 
 Runs inside the site's own JavaScript world before the site loads.
 
-- **GamepadShim** replaces `navigator.getGamepads`. While a game is being played and emulation is on, it returns exactly one virtual pad: `[pad, null, null, null]`. Otherwise it passes the real result through. It bumps `timestamp` on every state change, fires `gamepadconnected` and `gamepaddisconnected`, and hands over to a real controller when one is used more recently than the keyboard or mouse.
+- **GamepadShim** replaces `navigator.getGamepads`. While a game is being played and emulation is on, it returns exactly one virtual pad: `[pad, null, null, null]`. Otherwise it passes the real result through. It bumps `timestamp` on every state change, fires `gamepadconnected` and `gamepaddisconnected`, and hands over to a real controller when one is used more recently than the keyboard or mouse. Where Chrome has the `gamepadrawinputchanged` event (xbox.com turns it on with an origin trial), it also sends that event on every change, and holds back a real controller's raw events while the virtual pad stands in (D36).
 - **InputCapture** listens on `window` in the capture phase, which runs before any of the site's listeners. Bound keys are handled and stopped; unbound keys pass through; typing in text fields is never touched. The mouse is read only while captured with Pointer Lock, using raw movement when available. Blur, tab hide and losing the lock all release every input. It also wraps `Element.prototype.requestPointerLock` to notice when the site asks for the mouse itself, which signals its own mouse and keyboard mode.
   In **exclusive mode** (the user picked Ghostrol in a game with its own mouse support) it also hides every key, pointer and wheel event from the site, because in full screen the stream would forward them to the game (D16). Pointer events are hidden whenever the mouse is captured. Esc releases the capture itself, because the stream locks Esc in full screen.
 - **Shortcuts**: the page matches Chrome's shortcut text (`core/shortcuts.ts`) before anything else, so Alt+K, Alt+Period and Alt+C work in full screen. Chrome's copy of the same press is ignored (D18).
@@ -72,7 +72,7 @@ Handlers only record events. `sample(now)` computes the controller state when th
 
 ## Game detection and preset choice
 
-1. `parseGameUrl` finds the 12-character store product ID next to a route word (`launch`, `stream`, `games`) and the slug, in either order. Remote Play URLs are recognized separately; they have no game ID, so `describeGame` returns a Remote Play stand-in that remembers the player's pick (D35).
+1. `parseGameUrl` finds the 12-character store product ID next to a route word (`launch`, `stream`, `games`, `game-hub`, `products`) and the slug, in either order. Remote Play URLs (`remoteplay/<console>`, and the older `consoles/launch/<console>`) are recognized separately; they have no game ID, so `describeGame` returns a Remote Play stand-in that remembers the player's pick (D35).
 2. `describeGame` looks the ID up in the catalog (title, genres, popularity rank, native mouse support). Unknown IDs fall back to the slug, matched by normalized title. `archetypeForGenres` picks the genre layout; Fighting listed after Action & adventure or Role playing does not count (D24).
 3. `resolvePreset` picks, in order: the user's choice for this game, a tuned preset for its title, the genre layout, then the default.
 

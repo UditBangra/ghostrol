@@ -55,6 +55,23 @@ const FAKE_XCLOUD = `<!doctype html><html><body style="margin:0;background:#000"
   }
 </script></body></html>`;
 
+// The player with the site's event-driven input on: Chrome's gamepadrawinputchanged event
+// exists, and the player reads the pad only from those events, never by polling.
+const EVENT_PLAYER = `<!doctype html><html><body style="margin:0;background:#000">
+<video style="width:100vw;height:100vh;display:block"></video>
+<script>
+  window.ongamepadrawinputchanged = null;
+  window.rawPad = null;
+  window.rawEvents = 0;
+  window.rawPeak = new Array(17).fill(0);
+  window.addEventListener('gamepadrawinputchanged', (e) => {
+    const pad = e.gamepad;
+    window.rawEvents++;
+    window.rawPad = { id: pad.id, timestamp: pad.timestamp, buttons: pad.buttons.map((b) => b.value) };
+    window.rawPad.buttons.forEach((v, i) => (window.rawPeak[i] = Math.max(window.rawPeak[i], v)));
+  });
+</script></body></html>`;
+
 let failures = 0;
 function check(name, ok, detail = '') {
   console.log(`${ok ? 'pass' : 'FAIL'}  ${name}${detail ? `  (${detail})` : ''}`);
@@ -143,9 +160,15 @@ try {
   const extensionId = new URL(worker.url()).host;
   check('Chrome accepts the manifest and starts the service worker', !!extensionId, extensionId);
 
-  await context.route('https://www.xbox.com/**', (route) =>
-    route.fulfill({ status: 200, contentType: 'text/html', body: FAKE_XCLOUD }),
-  );
+  for (const host of ['https://www.xbox.com/**', 'https://play.xbox.com/**']) {
+    await context.route(host, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: route.request().url().includes('driven=1') ? EVENT_PLAYER : FAKE_XCLOUD,
+      }),
+    );
+  }
 
   // Close the welcome tab opened on install.
   for (const p of context.pages()) if (p.url().startsWith('chrome-extension://')) await p.close();
@@ -334,11 +357,11 @@ try {
   await worker.evaluate(() => chrome.storage.sync.remove('assignments'));
   await winds.close();
 
-  // Remote Play: no game ID in the URL. The pad still appears, the default preset is used
+  // Remote Play (play.xbox.com/remoteplay/<console>): no game ID in the URL. The pad still appears, the default preset is used
   // until the player picks, a pick is remembered, and the next preset shortcut flips
   // between a game's presets (GTA 6 driving and on foot).
   const remote = await context.newPage();
-  await remote.goto('https://www.xbox.com/en-US/play/consoles/launch/F4001ABCDEF12345');
+  await remote.goto('https://play.xbox.com/remoteplay/F4001ABCDEF12345');
   await remote.bringToFront();
   check('Remote Play gets the virtual controller', !!(await until(() => remote.evaluate(() => window.readPad()), 10000)));
   await remote.keyboard.down('KeyW');
@@ -366,6 +389,42 @@ try {
   check('Alt+Period in Remote Play flips GTA 6 from driving to on foot', flipped);
   await worker.evaluate(() => chrome.storage.sync.remove('assignments'));
   await remote.close();
+
+  // Event-driven input (D36): the player never polls, so every change must arrive as a
+  // gamepadrawinputchanged event, and another controller's events must not mix in.
+  const driven = await context.newPage();
+  await driven.goto('https://play.xbox.com/stream/9N431PX143P8/forza-horizon-6?driven=1');
+  await driven.bringToFront();
+  const sent = await until(() => driven.evaluate(() => window.rawPad), 10000);
+  check(
+    'with event-driven input, the pad reaches a player that never polls',
+    /Xbox/.test(sent?.id ?? ''),
+    sent?.id,
+  );
+  await driven.keyboard.down('KeyW');
+  const gas = await until(() => driven.evaluate(() => window.rawPad?.buttons[7] === 1));
+  await driven.keyboard.up('KeyW');
+  const lifted = await until(() => driven.evaluate(() => window.rawPad?.buttons[7] === 0));
+  check('a key press and its release each arrive as an event', gas && lifted);
+  await driven.evaluate(() => window.rawPeak.fill(0));
+  await driven.keyboard.press('Space');
+  const tapped = await until(() =>
+    driven.evaluate(() => window.rawPeak[0] === 1 && window.rawPad?.buttons[0] === 0),
+  );
+  check('a quick tap of Space arrives as a press, then a release', tapped);
+  const kept = await driven.evaluate(() => {
+    const before = window.rawEvents;
+    const event = new Event('gamepadrawinputchanged');
+    const idle = { pressed: false, touched: false, value: 0 };
+    const real = { index: 0, id: 'Real pad', connected: true, mapping: 'standard' };
+    Object.defineProperty(event, 'gamepad', {
+      value: { ...real, timestamp: performance.now(), axes: [0, 0, 0, 0], buttons: Array(17).fill(idle) },
+    });
+    window.dispatchEvent(event);
+    return window.rawEvents === before;
+  });
+  check('another controller cannot overwrite the pad while the keys are in use', kept);
+  await driven.close();
 
   // A game with native mouse support: the extension should stand by.
   const native = await context.newPage();

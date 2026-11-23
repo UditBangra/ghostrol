@@ -2,6 +2,13 @@
 
 What changed in each release. Every store upload needs a higher version than the last.
 
+## 0.1.3 (23 November 2026)
+
+- Remote Play works again. Xbox moved it to play.xbox.com/remoteplay, and Ghostrol did not recognize the new address, so the popup said "Pick a game" and no keys worked.
+- Ready for a change Xbox is testing in its new player: reading the controller from events instead of asking for it. Ghostrol now sends those events too, so your keys keep working if Xbox turns it on for you.
+- Game pages on play.xbox.com show that game in the popup again, so you can pick its preset before you start.
+- The popup flame burns at full strength while you play through Remote Play, as it does for cloud games.
+
 ## 0.1.2 (21 November 2026)
 
 - Remote Play from your own console now has its own preset choice. Pick any preset in the popup or the controls panel (Alt+C), or cycle with Alt+Period, and Ghostrol remembers it for the next session. Before, Remote Play always used your default preset and Alt+Period did nothing.

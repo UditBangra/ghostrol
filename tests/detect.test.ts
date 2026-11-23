@@ -31,10 +31,38 @@ describe('parseGameUrl', () => {
     expect(isPlaying(game)).toBe(false);
   });
 
-  it('reads Remote Play', () => {
+  it('reads the game and store pages on play.xbox.com', () => {
+    for (const url of [
+      'https://play.xbox.com/game-hub/9N431PX143P8/forza-horizon-6',
+      'https://play.xbox.com/products/9n431px143p8',
+    ]) {
+      const game = parseGameUrl(url);
+      expect(game).toMatchObject({ kind: 'details', productId: '9N431PX143P8' });
+      expect(isPlaying(game)).toBe(false);
+    }
+  });
+
+  it('reads Remote Play on the older site', () => {
     const game = parseGameUrl('https://www.xbox.com/en-US/play/consoles/launch/F4001ABCDEF12345');
     expect(game).toEqual({ kind: 'remote' });
     expect(isPlaying(game)).toBe(true);
+  });
+
+  it('reads Remote Play on play.xbox.com, where it is remoteplay and a console ID', () => {
+    for (const url of [
+      'https://play.xbox.com/remoteplay/F4001ABCDEF12345',
+      'https://play.xbox.com/en-US/remoteplay/F4001ABCDEF12345?x=1',
+      'https://play.xbox.com/remoteplay/1b2c3d4e-0000-4abc-9def-123456789abc',
+    ]) {
+      const game = parseGameUrl(url);
+      expect(game).toEqual({ kind: 'remote' });
+      expect(isPlaying(game)).toBe(true);
+    }
+  });
+
+  it('does not treat the Remote Play console list as playing', () => {
+    expect(parseGameUrl('https://play.xbox.com/remoteplay')).toBeNull();
+    expect(parseGameUrl('https://www.xbox.com/en-US/remoteplay')).toBeNull();
   });
 
   it('ignores other pages and sites', () => {

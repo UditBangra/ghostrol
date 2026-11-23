@@ -4,7 +4,10 @@
 //   https://www.xbox.com/en-US/play/launch/<slug>/<PRODUCTID>     cloud stream
 //   https://play.xbox.com/stream/<PRODUCTID>/<slug>               cloud stream, newer host
 //   https://www.xbox.com/en-US/play/games/<slug>/<PRODUCTID>      game details page
-//   https://www.xbox.com/en-US/play/consoles/launch/<CONSOLEID>   Remote Play
+//   https://play.xbox.com/game-hub/<PRODUCTID>/<slug>             game page (November 2026)
+//   https://play.xbox.com/products/<PRODUCTID>/<slug>             store page (November 2026)
+//   https://www.xbox.com/en-US/play/consoles/launch/<CONSOLEID>   Remote Play, older site
+//   https://play.xbox.com/remoteplay/<CONSOLEID>                  Remote Play (November 2026)
 // The parser looks for a store product ID next to a known route word instead of fixed
 // positions, so small route changes do not break it.
 
@@ -19,6 +22,8 @@ export interface PageGame {
 }
 
 const PRODUCT_ID = /^[A-Z0-9]{12}$/i;
+/** Console IDs look like F4001ABCDEF12345. Loose, so a GUID or a longer ID still matches. */
+const CONSOLE_ID = /^[A-Z0-9_-]{8,}$/i;
 const HOSTS = new Set(['www.xbox.com', 'xbox.com', 'play.xbox.com']);
 
 export function parseGameUrl(href: string): PageGame | null {
@@ -34,11 +39,16 @@ export function parseGameUrl(href: string): PageGame | null {
 
   const consoles = lower.indexOf('consoles');
   if (consoles !== -1 && lower[consoles + 1] === 'launch') return { kind: 'remote' };
+  // "remoteplay" alone is the console list. A console ID after it is a session.
+  const remote = lower.indexOf('remoteplay');
+  if (remote !== -1 && CONSOLE_ID.test(parts[remote + 1] ?? '')) return { kind: 'remote' };
 
   for (const [word, kind] of [
     ['launch', 'stream'],
     ['stream', 'stream'],
     ['games', 'details'],
+    ['game-hub', 'details'],
+    ['products', 'details'],
   ] as const) {
     const at = lower.indexOf(word);
     if (at === -1) continue;

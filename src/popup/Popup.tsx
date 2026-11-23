@@ -69,7 +69,7 @@ export function Popup() {
   if (!state || session === undefined) return <div class="popup loading" aria-busy="true" />;
 
   // The fire burns with the controller: full while playing, low when idle, embers when off.
-  const playing = session?.mode === 'emulate' && session.page?.kind === 'stream';
+  const playing = session?.mode === 'emulate' && isPlaying(session.page);
   const power = !state.settings.enabled ? 0 : playing ? 1 : 0.55;
 
   return (
