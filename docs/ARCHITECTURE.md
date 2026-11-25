@@ -64,6 +64,7 @@ Preact apps. The popup's fire compiles its shader in the background and fades in
 Handlers only record events. `sample(now)` computes the controller state when the site reads it:
 
 - **Buttons** are 0 or 1. Toggle buttons latch on press. A release is held back until the press has been sampled at least once and has lasted `MIN_PRESS_MS` (60 ms), so a quick tap between two polls still reaches the game.
+- **Combo keys**: a key bound to a trigger or bumper plus other controls presses the trigger or bumper first and the rest `comboDelayMs` later, judged at sample time, so games that read LT as a modifier see LT + Y (D38). Its release waits until the second part has been sampled and held for `MIN_PRESS_MS`.
 - **Stick directions and triggers** have ramp levels that ease out toward on or off: most of the travel happens right after the press, reaching 95% at `rampMs`. Releasing is twice as fast. A ramp of 0 is instant (D17). Each input event first advances the state to its own timestamp, so easing starts at the key press, not at the last poll.
 - **Sticks from keys** are normalized so diagonals stay on the unit circle. The precision key scales sticks and triggers.
 - **Mouse, camera mode**: the sum of movement in the last 24 ms divided by 24 gives speed in px/ms, independent of monitor refresh and poll rate. Speed times sensitivity goes through `shape()` (response curve plus anti-deadzone lift), then a time-based low-pass filter, so the stick eases back to center when the mouse stops.

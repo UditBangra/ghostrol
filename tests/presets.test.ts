@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { isInputCode, RESERVED_CODES } from '../src/core/inputs';
-import { fromPresetFile, sanitizePreset, toPresetFile, usesMouse } from '../src/core/preset';
+import {
+  DEFAULT_ANALOG,
+  fromPresetFile,
+  LIMITS,
+  sanitizePreset,
+  toPresetFile,
+  usesMouse,
+} from '../src/core/preset';
 import {
   candidatePresets,
   REMOTE_PLAY_KEY,
@@ -77,6 +84,13 @@ describe('preset files', () => {
     expect(cleaned.mouse.sensitivity).toBe(100);
     expect(cleaned.mouse.target).toBe('right');
     expect(cleaned.toggles).toEqual(['a']);
+  });
+
+  it('give saved presets from before combo keys the default delay, within limits', () => {
+    const old = sanitizePreset({ id: 'user:old', name: 'Old', analog: { stickRampMs: 100 } })!;
+    expect(old.analog.comboDelayMs).toBe(DEFAULT_ANALOG.comboDelayMs);
+    const wild = sanitizePreset({ id: 'user:w', name: 'W', analog: { comboDelayMs: 5000 } })!;
+    expect(wild.analog.comboDelayMs).toBe(LIMITS.comboDelayMs[1]);
   });
 });
 

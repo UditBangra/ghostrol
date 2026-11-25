@@ -2,6 +2,11 @@
 
 What changed in each release. Every store upload needs a higher version than the last.
 
+## 0.1.4 (25 November 2026)
+
+- Combo keys work in games. A key you add to two controls, like LT and Y, now presses LT first and Y 100 ms later, because many games only read LT + Y when LT is already held. Before, both went down at the same moment and the game often missed the combo. Change the delay in the Studio under Combo keys.
+- Warframe's 1 to 5 cast abilities the same way: the ability button first, then the face button.
+
 ## 0.1.3 (23 November 2026)
 
 - Remote Play works again. Xbox moved it to play.xbox.com/remoteplay, and Ghostrol did not recognize the new address, so the popup said "Pick a game" and no keys worked.

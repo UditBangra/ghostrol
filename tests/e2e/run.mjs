@@ -357,6 +357,32 @@ try {
   await worker.evaluate(() => chrome.storage.sync.remove('assignments'));
   await winds.close();
 
+  // Warframe: 1 is a combo key for LB and A. LB goes down first and A follows after the
+  // preset's combo delay (100 ms), so the game reads LB + A instead of a plain A (D38).
+  const warframe = await context.newPage();
+  await warframe.goto('https://www.xbox.com/en-US/play/launch/warframe/BPS3XF74B9V1');
+  await warframe.bringToFront();
+  await until(() => warframe.evaluate(() => window.readPad()), 10000);
+  await warframe.keyboard.down('Digit1');
+  const comboAt = Date.now();
+  const comboFirst = await warframe.evaluate(() => window.readPad());
+  const comboDone = await until(() => warframe.evaluate(() => window.readPad().buttons[0] === 1));
+  const comboGap = Date.now() - comboAt;
+  check(
+    'a combo key presses LB first and A after the combo delay (Warframe 1)',
+    comboFirst.buttons[4] === 1 && comboFirst.buttons[0] === 0 && comboDone && comboGap >= 80,
+    `LB ${comboFirst.buttons[4]}, A ${comboFirst.buttons[0]} at first, A after ${comboGap} ms`,
+  );
+  await warframe.keyboard.up('Digit1');
+  await until(() => warframe.evaluate(() => window.readPad().buttons[4] === 0));
+  await warframe.evaluate(() => window.resetPeak());
+  await warframe.keyboard.press('Digit1');
+  const comboTapped = await until(() =>
+    warframe.evaluate(() => window.peak[4] === 1 && window.peak[0] === 1),
+  );
+  check('a quick tap of a combo key still reaches the site as LB + A', comboTapped);
+  await warframe.close();
+
   // Remote Play (play.xbox.com/remoteplay/<console>): no game ID in the URL. The pad still appears, the default preset is used
   // until the player picks, a pick is remembered, and the next preset shortcut flips
   // between a game's presets (GTA 6 driving and on foot).

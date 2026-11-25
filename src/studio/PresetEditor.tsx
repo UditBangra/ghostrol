@@ -198,6 +198,12 @@ export function PresetEditor({ preset, state }: { preset: Preset; state: StoredS
             update={update}
             onCopy={() => void copyToEdit(preset)}
           />
+          <ComboPanel
+            preset={draft}
+            editable={editable}
+            update={update}
+            onCopy={() => void copyToEdit(preset)}
+          />
           <section class="panel">
             <h2>Find a control</h2>
             <p class="dim small">Click a button on the controller to jump to its keys.</p>
@@ -618,6 +624,40 @@ function AnalogPanel(props: {
           format={(v) => `${Math.round(v * 100)}%`}
           hint="How far sticks and triggers go while the precision key is held. Good for sneaking and lockpicking."
           onInput={(v) => set((d) => (d.analog.precision = v))}
+        />
+      </div>
+    </section>
+  );
+}
+
+function ComboPanel(props: {
+  preset: Preset;
+  editable: boolean;
+  update: (change: (d: Preset) => void) => void;
+  onCopy: () => void;
+}) {
+  const locked = !props.editable;
+  const set = (change: (d: Preset) => void) => props.editable && props.update(change);
+  return (
+    <section class="panel">
+      <h2>Combo keys</h2>
+      {!props.editable && <LockedNote onCopy={props.onCopy} />}
+      <p class="dim small">
+        Add one key to two controls, like LT and Y, to press both with it. A trigger or bumper goes
+        down first and the other control follows, because many games only read LT + Y when LT is
+        already held.
+      </p>
+      <div class="sliders">
+        <Slider
+          disabled={locked}
+          label="Combo delay"
+          value={props.preset.analog.comboDelayMs}
+          min={LIMITS.comboDelayMs[0]}
+          max={LIMITS.comboDelayMs[1]}
+          step={10}
+          format={(v) => (v === 0 ? 'Together' : `${v} ms`)}
+          hint="Time between the trigger or bumper and the other control. Raise it if a game still misses the combo."
+          onInput={(v) => set((d) => (d.analog.comboDelayMs = v))}
         />
       </div>
     </section>

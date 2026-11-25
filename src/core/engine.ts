@@ -3,12 +3,12 @@
 // Input handlers only record what happened. The controller state is computed in
 // sample(now), which the page calls whenever the site asks for gamepads. Analog ramps
 // and mouse smoothing advance by the time since the previous sample, so the engine needs
-// no timers of its own and adds no delay.
+// no timers of its own and adds no delay, except the combo delay a preset asks for.
 
 import { MouseShaper } from './mouse';
 import type { InputCode } from './inputs';
 import type { Preset } from './preset';
-import { BUTTONS, BUTTON_COUNT, type Button, type Target } from './targets';
+import { ACTIONS, BUTTONS, BUTTON_COUNT, type Button, type Target } from './targets';
 
 /** How long one wheel notch holds its bound control down. */
 export const WHEEL_PULSE_MS = 90;
@@ -19,6 +19,23 @@ export const WHEEL_PULSE_MS = 90;
  * press has been read at least once and has lasted this long.
  */
 export const MIN_PRESS_MS = 60;
+
+/**
+ * Controls a combo key presses first. Games read them as modifiers: LT + Y only counts
+ * when LT is already held as Y goes down, so a key bound to both presses LT, waits the
+ * preset's combo delay, then presses Y (D38).
+ */
+const COMBO_LEADS: ReadonlySet<Target> = new Set<Target>(['lt', 'rt', 'lb', 'rb']);
+const ACTION_SET: ReadonlySet<Target> = new Set<Target>(ACTIONS);
+
+/** What a combo key presses after the delay: everything but its leads and actions. */
+function isComboFollower(target: Target): boolean {
+  return !COMBO_LEADS.has(target) && !ACTION_SET.has(target);
+}
+
+function isCombo(targets: readonly Target[]): boolean {
+  return targets.some((t) => COMBO_LEADS.has(t)) && targets.some(isComboFollower);
+}
 
 const STICK_DIRS = [
   'lsUp',
@@ -49,6 +66,9 @@ export class InputEngine {
   private preset!: Preset;
   private index = new Map<InputCode, Target[]>();
   private toggleSet = new Set<Button>();
+  /** Inputs that press a trigger or bumper first and the rest after the combo delay. */
+  private combos = new Set<InputCode>();
+  private comboDelay = 0;
   private readonly held = new Set<InputCode>();
   /** When each held input went down. */
   private readonly pressedAt = new Map<InputCode, number>();
@@ -56,7 +76,8 @@ export class InputEngine {
   private readonly seen = new Set<InputCode>();
   /** Released inputs still shown as held so a quick tap is not lost. */
   private readonly releasing = new Set<InputCode>();
-  private readonly pulses = new Map<InputCode, number>();
+  /** Wheel notches in progress: when each started and when it ends. */
+  private readonly pulses = new Map<InputCode, { start: number; until: number }>();
   private readonly latched = new Set<Button>();
   private readonly active = new Set<Target>();
   private readonly levels = new Float64Array(RAMP_SLOTS.length);
@@ -87,6 +108,11 @@ export class InputEngine {
       }
     }
     this.index = index;
+    this.comboDelay = preset.analog.comboDelayMs;
+    this.combos = new Set();
+    if (this.comboDelay > 0) {
+      for (const [code, targets] of index) if (isCombo(targets)) this.combos.add(code);
+    }
     this.toggleSet = new Set(preset.toggles);
     this.mouse.setSettings(preset.mouse);
     this.releaseAll();
@@ -128,6 +154,8 @@ export class InputEngine {
       this.held.add(code);
     }
     this.pressedAt.set(code, now);
+    // A new press has to be read again before it can end.
+    this.seen.delete(code);
     for (const target of targets) {
       if (target === 'recenter') this.mouse.recenter();
       else if (this.toggleSet.has(target as Button)) this.flipLatch(target as Button);
@@ -145,8 +173,18 @@ export class InputEngine {
     return true;
   }
 
+  /** How long after the press the last controls of this input go down. */
+  private delayOf(code: InputCode): number {
+    return this.combos.has(code) ? this.comboDelay : 0;
+  }
+
+  private heldFor(code: InputCode, now: number): number {
+    return now - (this.pressedAt.get(code) ?? -Infinity);
+  }
+
+  /** The whole press, a combo's second part included, was read and lasted long enough. */
   private shownLongEnough(code: InputCode, now: number): boolean {
-    return this.seen.has(code) && now - (this.pressedAt.get(code) ?? -Infinity) >= MIN_PRESS_MS;
+    return this.seen.has(code) && this.heldFor(code, now) >= this.delayOf(code) + MIN_PRESS_MS;
   }
 
   private drop(code: InputCode): void {
@@ -162,13 +200,17 @@ export class InputEngine {
     if (!targets) return false;
     this.lastInputAt = now;
     this.advanceTo(now);
-    if (!this.pulses.has(code)) {
+    const current = this.pulses.get(code);
+    if (current) {
+      // Another notch keeps it down, and a combo's second part still gets a full pulse.
+      current.until = Math.max(current.start + this.delayOf(code), now) + WHEEL_PULSE_MS;
+    } else {
       for (const target of targets) {
         if (this.toggleSet.has(target as Button)) this.flipLatch(target as Button);
         else if (target === 'recenter') this.mouse.recenter();
       }
+      this.pulses.set(code, { start: now, until: now + this.delayOf(code) + WHEEL_PULSE_MS });
     }
-    this.pulses.set(code, now + WHEEL_PULSE_MS);
     return true;
   }
 
@@ -197,8 +239,11 @@ export class InputEngine {
    */
   sample(now: number): boolean {
     this.advanceTo(now);
-    // Everything held now has been reported to the site at least once.
-    for (const code of this.held) this.seen.add(code);
+    // Everything held now has been reported to the site at least once, a combo only once
+    // its second part is down.
+    for (const code of this.held) {
+      if (this.heldFor(code, now) >= this.delayOf(code)) this.seen.add(code);
+    }
     const changed = this.dirty;
     this.dirty = false;
     return changed;
@@ -259,20 +304,24 @@ export class InputEngine {
   private collectActive(now: number): void {
     const active = this.active;
     active.clear();
-    for (const code of this.held) this.addTargets(code);
-    for (const [code, until] of this.pulses) {
-      if (until <= now) this.pulses.delete(code);
-      else this.addTargets(code);
+    for (const code of this.held) this.addTargets(code, this.heldFor(code, now));
+    for (const [code, pulse] of this.pulses) {
+      if (pulse.until <= now) this.pulses.delete(code);
+      else this.addTargets(code, now - pulse.start);
     }
     for (const button of this.latched) active.add(button);
   }
 
-  private addTargets(code: InputCode): void {
+  private addTargets(code: InputCode, heldFor: number): void {
     const targets = this.index.get(code);
     if (!targets) return;
+    const early = heldFor < this.delayOf(code);
     for (const target of targets) {
       // Toggle buttons are driven by their latch, not by being held.
-      if (!this.toggleSet.has(target as Button)) this.active.add(target);
+      if (this.toggleSet.has(target as Button)) continue;
+      // A combo's second part waits for the delay.
+      if (early && isComboFollower(target)) continue;
+      this.active.add(target);
     }
   }
 

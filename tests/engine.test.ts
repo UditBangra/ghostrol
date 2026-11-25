@@ -196,6 +196,94 @@ describe('InputEngine', () => {
     expect(button(engine, 'rb')).toBe(1);
   });
 
+  describe('combo keys', () => {
+    const delay = DEFAULT_ANALOG.comboDelayMs;
+    const combo = (comboDelayMs = delay) =>
+      new InputEngine(
+        preset({
+          bindings: { lt: ['KeyQ'], y: ['KeyQ'], lb: ['WheelUp'], a: ['WheelUp'] },
+          analog: { ...DEFAULT_ANALOG, comboDelayMs },
+        }),
+      );
+
+    it('presses the trigger first and the other button after the delay', () => {
+      const engine = combo();
+      engine.press('KeyQ', 0);
+      engine.sample(0);
+      expect(button(engine, 'lt')).toBe(1);
+      expect(button(engine, 'y')).toBe(0);
+      engine.sample(delay - 1);
+      expect(button(engine, 'y')).toBe(0);
+      expect(engine.sample(delay)).toBe(true);
+      expect(button(engine, 'lt')).toBe(1);
+      expect(button(engine, 'y')).toBe(1);
+      engine.release('KeyQ', delay + 200);
+      engine.sample(delay + 200);
+      expect(button(engine, 'lt')).toBe(0);
+      expect(button(engine, 'y')).toBe(0);
+    });
+
+    it('plays the whole combo on a quick tap', () => {
+      const engine = combo();
+      engine.press('KeyQ', 0);
+      engine.release('KeyQ', 10);
+      engine.sample(20);
+      expect(button(engine, 'lt')).toBe(1);
+      expect(button(engine, 'y')).toBe(0);
+      // Skipping past the delay still shows the button at least once.
+      engine.sample(delay + MIN_PRESS_MS + 50);
+      expect(button(engine, 'lt')).toBe(1);
+      expect(button(engine, 'y')).toBe(1);
+      engine.sample(delay + MIN_PRESS_MS + 54);
+      expect(button(engine, 'lt')).toBe(0);
+      expect(button(engine, 'y')).toBe(0);
+    });
+
+    it('holds the second button for the shortest press', () => {
+      const engine = combo();
+      engine.press('KeyQ', 0);
+      engine.release('KeyQ', 10);
+      engine.sample(delay);
+      engine.sample(delay + MIN_PRESS_MS - 1);
+      expect(button(engine, 'y')).toBe(1);
+      engine.sample(delay + MIN_PRESS_MS);
+      expect(button(engine, 'y')).toBe(0);
+    });
+
+    it('gives a wheel notch combo a full pulse after the delay', () => {
+      const engine = combo();
+      engine.pulse('WheelUp', 0);
+      engine.sample(0);
+      expect(button(engine, 'lb')).toBe(1);
+      expect(button(engine, 'a')).toBe(0);
+      engine.sample(delay + WHEEL_PULSE_MS - 1);
+      expect(button(engine, 'lb')).toBe(1);
+      expect(button(engine, 'a')).toBe(1);
+      engine.sample(delay + WHEEL_PULSE_MS);
+      expect(button(engine, 'lb')).toBe(0);
+      expect(button(engine, 'a')).toBe(0);
+    });
+
+    it('presses everything together when the delay is off', () => {
+      const engine = combo(0);
+      engine.press('KeyQ', 0);
+      engine.sample(0);
+      expect(button(engine, 'lt')).toBe(1);
+      expect(button(engine, 'y')).toBe(1);
+    });
+
+    it('does not delay a key bound only to triggers, bumpers or actions', () => {
+      const engine = new InputEngine(
+        preset({ bindings: { lt: ['KeyQ'], rb: ['KeyQ'], precision: ['KeyQ'], a: ['Space'] } }),
+      );
+      engine.press('KeyQ', 0);
+      engine.press('Space', 0);
+      engine.sample(0);
+      expect(button(engine, 'rb')).toBe(1);
+      expect(button(engine, 'a')).toBe(1);
+    });
+  });
+
   it('lets go of everything on releaseAll', () => {
     const engine = new InputEngine(preset({ toggles: ['a'] }));
     engine.press('Space', 0);

@@ -1,6 +1,6 @@
 # Progress
 
-Last updated 2026-11-23. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is published too (2026-11-20), and the listing has the promo video https://www.youtube.com/watch?v=GDyVCLB7WDg. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. Versions 0.1.2 (2026-11-21) and 0.1.3 (2026-11-23) followed. The next release must be higher than 0.1.3.
+Last updated 2026-11-25. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is published too (2026-11-20), and the listing has the promo video https://www.youtube.com/watch?v=GDyVCLB7WDg. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. Versions 0.1.2 (2026-11-21) and 0.1.3 (2026-11-23) followed. 0.1.4 (combo keys, D38) is built and not yet uploaded. The next release must be higher than 0.1.4.
 
 On 2026-10-31 the owner reset the version to 0.1.0 for the first public release. The earlier internal builds below were also called 0.1.0 and 0.2.0; nothing was published under those numbers. From the first Chrome Web Store upload on, every release needs a higher version than the last.
 
@@ -98,7 +98,9 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 - [x] 0.1.2 on the Chrome Web Store (players reported it on 2026-11-21)
 - [x] 0.1.3: Remote Play at its new address, play.xbox.com/remoteplay/<console> (issue #7); the virtual pad also sends event-driven input, which Xbox can switch on in its new player (D36); game pages on play.xbox.com are recognized
 - [x] 0.1.3 on the Chrome Web Store (2026-11-23); the reporters of issues #6 and #7 were asked to try it
-- [ ] Owner: attach the 0.1.2 and 0.1.3 zips to GitHub Releases
+- [x] 0.1.4: a key bound to a trigger or bumper plus another control presses the trigger or bumper first and the rest after a combo delay, 100 ms by default, set in the Studio under Combo keys (D38). From a Reddit report: one key on LT and Y showed LT + Y in the corner but did nothing in game
+- [ ] Owner: upload 0.1.4 to the Chrome Web Store, then post the reply asking the Reddit player to test again
+- [ ] Owner: attach the 0.1.2, 0.1.3 and 0.1.4 zips to GitHub Releases
 - [ ] Import from ModernKit (user's exported presets)
 - [ ] Publish on Microsoft Edge Add-ons as well
 - [ ] Fuller website (postponed by the owner on 2026-11-19): home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon
@@ -113,8 +115,8 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 | --- | --- |
 | `npm run typecheck` | clean |
 | `npm run lint` | clean |
-| `npm test` | 67 passed |
-| `npm run e2e` (Chromium 156, stand-in page at real xbox.com URLs) | 48 passed (adds: in-page navigation brings the controller within a second, a controller read under 20 µs (measured 2 to 4 µs), Report a problem opens the bug form) |
+| `npm test` | 83 passed (0.1.4 adds combo keys: order, quick taps, wheel, delay off, older presets) |
+| `npm run e2e` (Chromium 156, stand-in page at real xbox.com URLs) | 58 passed on 2026-11-25 (0.1.4 adds: Warframe 1 presses LB, then A about 120 ms later; a quick tap still reaches the site as LB + A). The instant Backspace tap check failed once right after the cold start and passed on the re-run |
 | Real xCloud stream | Release build played by the owner on 2026-10-31, no problems |
 
 New end-to-end checks in 0.2.0: full throttle at once and steering easing in, key chips in the corner, unbound keys passing through in controller-only games, Alt+K from inside the page, the panel opening on a tap, picking a preset in it, Esc closing it and holding to peek, exclusive mode hiding all keys and pointer events from the site while W still drives, the preset maker end to end, and no overflow in the Studio at four widths.
@@ -136,6 +138,7 @@ Found and fixed while testing: blurred shadows over the video stalled frames wit
 11. Open the popup a few times: it should appear at once, with the fire fading in a moment later.
 12. Studio: drag sliders on one of your own presets; on a built-in one they are grey with a Make a copy to edit button.
 13. Studio: switch Input display between Off and Keys, and click through the sidebar; the highlights should glide. Scroll a long page with the wheel.
+14. Combo keys: in your own preset, add one key to LT and Y (or use Warframe's 1). In game, the combo action should happen, not a plain Y. If a game still misses it, raise Combo delay in the Studio.
 
 Report anything odd with the game name and what you pressed.
 
@@ -147,6 +150,7 @@ Report anything odd with the game name and what you pressed.
 - **Native detection:** if the site asks for Pointer Lock in a game without native support, we stand by needlessly. Alt+K overrides it per game.
 - **Two xbox.com sites:** since about 2026-11-21 players get either the old site or the rebuilt one on play.xbox.com (RESEARCH, the rebuilt site). Not yet tested signed in on the new site by us. The origin trial behind event-driven input expires 2026-12-08; if Chrome ships the event, the D36 path stays in use. If the site ever polls controllers inside a Web Worker by default, the virtual pad cannot reach it.
 - **Playwright held at 1.64.1:** Smart App Control on the owner's laptop blocks the Chromium build newer Playwright versions use, so it is pinned and Dependabot skips it (D37). Retry now and then.
+- **Combo delay:** 100 ms is a guess that leaves room for network jitter; it has not been tried in a real game yet. A game that wants the modifier held longer needs the slider raised, and a combo where the order should be different (a face button before a trigger) is not covered.
 - **Overlay font:** xbox.com's content security policy may block the extension font in the overlay, which then falls back to the system font. Harmless.
 - **Remote Play:** it has no game ID, so it starts on the default preset and remembers what the player picks there (D35). One choice covers all Remote Play games. Not yet tested on a real console by us; the first reports came from Reddit players. In November 2026 Xbox moved it to `play.xbox.com/remoteplay/<console>`, and the old `/play/consoles/launch/` link now redirects there; 0.1.2 missed the new address (issue #7). Both are recognized from 0.1.3.
 

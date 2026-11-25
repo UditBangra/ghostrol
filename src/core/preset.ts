@@ -39,6 +39,11 @@ export interface AnalogSettings {
   triggerRampMs: number;
   /** Stick and trigger scale while the precision key is held. */
   precision: number;
+  /**
+   * A key bound to a trigger or bumper and other controls presses the trigger or bumper
+   * first and the rest this long after. 0 presses them together.
+   */
+  comboDelayMs: number;
 }
 
 export type ArchetypeId =
@@ -88,6 +93,7 @@ export const DEFAULT_ANALOG: Readonly<AnalogSettings> = Object.freeze({
   stickRampMs: 0,
   triggerRampMs: 0,
   precision: 0.45,
+  comboDelayMs: 100,
 });
 
 export const LIMITS = {
@@ -100,6 +106,7 @@ export const LIMITS = {
   stickRampMs: [0, 1000],
   triggerRampMs: [0, 1000],
   precision: [0.1, 0.9],
+  comboDelayMs: [0, 300],
 } as const satisfies Record<string, readonly [number, number]>;
 
 /** Chords bind several keys to one button (Warframe binds five keys to the ability button). */
@@ -159,6 +166,7 @@ export function sanitizeAnalog(raw: unknown): AnalogSettings {
     stickRampMs: Math.round(clamp(a.stickRampMs, LIMITS.stickRampMs, d.stickRampMs)),
     triggerRampMs: Math.round(clamp(a.triggerRampMs, LIMITS.triggerRampMs, d.triggerRampMs)),
     precision: clamp(a.precision, LIMITS.precision, d.precision),
+    comboDelayMs: Math.round(clamp(a.comboDelayMs, LIMITS.comboDelayMs, d.comboDelayMs)),
   };
 }
 

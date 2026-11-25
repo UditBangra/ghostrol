@@ -4,11 +4,11 @@
 
 A preset (`src/core/preset.ts`) has:
 
-- `bindings`: target to a list of inputs, up to 8 per target. One input may drive several targets, which is how chords work (Warframe's 1 presses LB and A).
+- `bindings`: target to a list of inputs, up to 8 per target. One input may drive several targets, which is how chords work (Warframe's 1 presses LB and A). When those include a trigger or bumper and another control, the trigger or bumper goes down first and the rest after `analog.comboDelayMs` (D38).
 - `labels`: what each target does in this game, shown next to the key.
 - `toggles`: buttons that latch on press.
 - `mouse`: `target` (right, left or none), `mode` (camera or wheel), `sensitivity` 1 to 100, `yRatio`, `invertY`, `curve`, `antiDeadzone`, `smoothing`, `wheelReturn`.
-- `analog`: `stickRampMs`, `triggerRampMs`, `precision`. Ramps ease out: most of the travel comes right after the press, and the ramp time is when they reach 95%. Keep throttle and fire buttons at 0 (instant); ease only steering and movement that needs it.
+- `analog`: `stickRampMs`, `triggerRampMs`, `precision`, `comboDelayMs` (0 to 300, default 100, 0 presses a combo key's controls together). Ramps ease out: most of the travel comes right after the press, and the ramp time is when they reach 95%. Keep throttle and fire buttons at 0 (instant); ease only steering and movement that needs it.
 
 Targets are the 17 standard buttons (`a b x y lb rb lt rt view menu ls rs dpadUp dpadDown dpadLeft dpadRight guide`), 8 stick directions (`lsUp` and so on), and two actions: `precision` (scale sticks and triggers while held) and `recenter` (center the wheel in wheel mode).
 
