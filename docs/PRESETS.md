@@ -18,7 +18,7 @@ Shared files use `{ "format": "ghostrol.preset", "version": 1, "preset": { ... }
 
 ## Where presets come from
 
-1. **Genre layouts** (`src/data/archetypes.ts`): shooter, action adventure, role playing, racing, sports, fighting, platformer, strategy and sim, flight, top-down, and puzzle and casual. Every catalog game maps to one through its store categories (`archetypeForGenres` in `src/data/catalog.ts`). Fighting only counts when Action & adventure or Role playing is not listed before it, because the store also tags action games with combat as Fighting (D24). Four presets are keys-only: the sports, fighting and platformer layouts and NBA 2K.
+1. **Genre layouts** (`src/data/archetypes.ts`): shooter, action adventure, role playing, racing, sports, fighting, platformer, strategy and sim, flight, top-down, and puzzle and casual. Every catalog game maps to one through its store categories (`archetypeForGenres` in `src/data/catalog.ts`). Fighting only counts when Action & adventure or Role playing is not listed before it, because the store also tags action games with combat as Fighting (D24). Five presets are keys-only: the sports, fighting and platformer layouts, NBA 2K and UFC 5.
 2. **Tuned presets** (`src/data/games.ts`): a genre layout plus game-specific keys and labels.
 3. **User presets**: copies and imports, stored in sync storage.
 
@@ -43,6 +43,8 @@ Keys follow each game's own PC defaults where the game has a PC version, so PC p
 | Skyrim | Skyrim Special Edition | Xbox 360 manual (same layout), UESP control names |
 | Fallout 4 | Fallout 4 | Fextralife wiki, the official game manual |
 | NBA 2K | NBA 2K27, NBA 2K26 | keymap.io (controller only; keys follow the sports layout) |
+| Genshin Impact | Genshin Impact | volx.jp (table of the in-game controller settings), 10scopes.com, 10pcg.com, wikihow.com, bittopup.com; all agree on every button. D-pad: four sources give up, right, left, down for party members 1 to 4 and shortcutposters.com gives down for 3 and left for 4, so the majority is used. Party member 5 is LB + Y (10scopes.com, 10pcg.com). Keys follow the PC defaults (keymap.io, Genshin Impact wiki, game8.co). keymap.io's controller table disagrees with every other source and is not used |
+| UFC 5 | UFC 5, Deluxe and Ultimate editions | realsport101.com controls guide (updated 2026-06-17), ginx.tv, ufc5guide.wiki (from EA's Xbox controls page), dexerto.com for blocking; all agree on every default button. Key placement in D39 |
 | GTA 6 (on foot) and GTA 6 (driving) | Grand Theft Auto VI (console only, for Remote Play) | gtabase.com controls guide (from the in-game control screens, updated 2026-11-20), insider-gaming.com (2026-11-18); both agree on every default button. No PC version, so keys follow GTA V's PC defaults (D35) |
 
 ## Waiting for verification

@@ -2,6 +2,11 @@
 
 What changed in each release. Every store upload needs a higher version than the last.
 
+## 0.1.5 (27 November 2026)
+
+- New UFC 5 preset. Strikes stay on I, J, K and L, the modifiers and block move to Q, E, Shift and Space, and the arrow keys are the right stick for head movement and grapple transitions. U and O press the clinch pairs, so Shift with U or O does the takedowns, and Ctrl blocks low and stops takedowns.
+- New Genshin Impact preset with the PC keys: left click attacks, E for skill, Q for burst, 1 to 5 switch characters, Shift or right click sprints, F picks up and Tab opens the shortcut wheel.
+
 ## 0.1.4 (25 November 2026)
 
 - Combo keys work in games. A key you add to two controls, like LT and Y, now presses LT first and Y 100 ms later, because many games only read LT + Y when LT is already held. Before, both went down at the same moment and the game often missed the combo. Change the delay in the Studio under Combo keys.

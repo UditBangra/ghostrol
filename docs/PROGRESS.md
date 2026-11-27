@@ -1,6 +1,6 @@
 # Progress
 
-Last updated 2026-11-25. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is published too (2026-11-20), and the listing has the promo video https://www.youtube.com/watch?v=GDyVCLB7WDg. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. Versions 0.1.2 (2026-11-21) and 0.1.3 (2026-11-23) followed. 0.1.4 (combo keys, D38) is built and not yet uploaded. The next release must be higher than 0.1.4.
+Last updated 2026-11-27. Version 0.1.0 is published on the Chrome Web Store (submitted 2026-11-16, public by 2026-11-19): https://chromewebstore.google.com/detail/enbejgjcnknlmempckoelehnhkagmngj. Version 0.1.1 (correct rating link, uninstall page) is published too (2026-11-20), and the listing has the promo video https://www.youtube.com/watch?v=GDyVCLB7WDg. Store images are in `store/`, made by `npm run shots` then `node scripts/store-images.mjs`. Versions 0.1.2 (2026-11-21) and 0.1.3 (2026-11-23) followed. 0.1.4 (combo keys, D38) was never uploaded; 0.1.5 (UFC 5 and Genshin Impact presets, D39) includes it. The next release must be higher than 0.1.5.
 
 On 2026-10-31 the owner reset the version to 0.1.0 for the first public release. The earlier internal builds below were also called 0.1.0 and 0.2.0; nothing was published under those numbers. From the first Chrome Web Store upload on, every release needs a higher version than the last.
 
@@ -99,8 +99,9 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 - [x] 0.1.3: Remote Play at its new address, play.xbox.com/remoteplay/<console> (issue #7); the virtual pad also sends event-driven input, which Xbox can switch on in its new player (D36); game pages on play.xbox.com are recognized
 - [x] 0.1.3 on the Chrome Web Store (2026-11-23); the reporters of issues #6 and #7 were asked to try it
 - [x] 0.1.4: a key bound to a trigger or bumper plus another control presses the trigger or bumper first and the rest after a combo delay, 100 ms by default, set in the Studio under Combo keys (D38). From a Reddit report: one key on LT and Y showed LT + Y in the corner but did nothing in game
-- [ ] Owner: upload 0.1.4 to the Chrome Web Store, then post the reply asking the Reddit player to test again
-- [ ] Owner: attach the 0.1.2, 0.1.3 and 0.1.4 zips to GitHub Releases
+- [x] 0.1.5: tuned presets for UFC 5 (right stick on the arrow keys, modifiers under the left hand, D39) and Genshin Impact (PC keys), asked for in YouTube comments on 2026-11-27
+- [ ] Owner: upload 0.1.5 (which includes 0.1.4) to the Chrome Web Store, then post the reply asking the Reddit player to test again and answer the two YouTube comments
+- [ ] Owner: attach the 0.1.2, 0.1.3 and 0.1.5 zips to GitHub Releases
 - [ ] Import from ModernKit (user's exported presets)
 - [ ] Publish on Microsoft Edge Add-ons as well
 - [ ] Fuller website (postponed by the owner on 2026-11-19): home, install, per-game pages, privacy, uninstall feedback page; designed by hand, smooth hover, some neon
@@ -115,8 +116,8 @@ Owner's release decisions (2026-11-16, from the release guide answers): GPL-3.0 
 | --- | --- |
 | `npm run typecheck` | clean |
 | `npm run lint` | clean |
-| `npm test` | 83 passed (0.1.4 adds combo keys: order, quick taps, wheel, delay off, older presets) |
-| `npm run e2e` (Chromium 156, stand-in page at real xbox.com URLs) | 58 passed on 2026-11-25 (0.1.4 adds: Warframe 1 presses LB, then A about 120 ms later; a quick tap still reaches the site as LB + A). The instant Backspace tap check failed once right after the cold start and passed on the re-run |
+| `npm test` | 86 passed (0.1.5 adds: UFC 5 and Genshin Impact resolve to their presets, editions included; UFC 5 arrow keys, clinch pairs and Ctrl; Genshin 1 to 5) |
+| `npm run e2e` (Chromium 156, stand-in page at real xbox.com URLs) | All passed again on 2026-11-27 for 0.1.5. 58 passed on 2026-11-25 (0.1.4 adds: Warframe 1 presses LB, then A about 120 ms later; a quick tap still reaches the site as LB + A). The instant Backspace tap check failed once right after the cold start and passed on the re-run |
 | Real xCloud stream | Release build played by the owner on 2026-10-31, no problems |
 
 New end-to-end checks in 0.2.0: full throttle at once and steering easing in, key chips in the corner, unbound keys passing through in controller-only games, Alt+K from inside the page, the panel opening on a tap, picking a preset in it, Esc closing it and holding to peek, exclusive mode hiding all keys and pointer events from the site while W still drives, the preset maker end to end, and no overflow in the Studio at four widths.

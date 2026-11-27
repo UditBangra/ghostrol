@@ -111,6 +111,43 @@ describe('game detection and resolution', () => {
     });
   });
 
+  it('picks the UFC 5 and Genshin Impact presets, editions included', () => {
+    for (const [productId, id] of [
+      ['9NH8K4B707H0', 'game:ufc-5'],
+      ['9NXTCLM90W7V', 'game:ufc-5'],
+      ['9PB7MT0VTQCF', 'game:ufc-5'],
+      ['9N7TFFRRZCC9', 'game:genshin-impact'],
+    ]) {
+      const game = describeGame({ kind: 'stream', productId });
+      expect(resolvePreset(game, ctx)).toMatchObject({ reason: 'tuned', preset: { id } });
+    }
+  });
+
+  it('gives UFC 5 the right stick and its two-button moves', () => {
+    const ufc = presets.get('game:ufc-5')!;
+    const on = (code: string) =>
+      Object.entries(ufc.bindings)
+        .filter(([, codes]) => codes?.includes(code))
+        .map(([target]) => target)
+        .sort();
+    expect(on('ArrowUp')).toEqual(['rsUp']);
+    expect(on('KeyU')).toEqual(['a', 'x']);
+    expect(on('KeyO')).toEqual(['b', 'y']);
+    expect(on('ControlLeft')).toEqual(['lt', 'rt']);
+    expect(usesMouse(ufc)).toBe(false);
+  });
+
+  it('switches Genshin Impact characters with 1 to 5', () => {
+    const genshin = presets.get('game:genshin-impact')!;
+    expect(genshin.bindings.dpadUp).toContain('Digit1');
+    expect(genshin.bindings.dpadRight).toContain('Digit2');
+    expect(genshin.bindings.dpadLeft).toContain('Digit3');
+    expect(genshin.bindings.dpadDown).toContain('Digit4');
+    expect(genshin.bindings.lb).toContain('Digit5');
+    expect(genshin.bindings.y).toContain('Digit5');
+    expect(usesMouse(genshin)).toBe(true);
+  });
+
   it('falls back to the URL slug for games missing from the catalog', () => {
     const game = describeGame({
       kind: 'stream',
